@@ -17,7 +17,8 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
     rm -rf "$tmp_dir"
 
     ## Run STAR alignment for STAR-Fusion
-    echo "$(date +"%F") $(date +"%T")" "Running STAR alignment for STAR-Fusion ..."
+    echo "$(date +"%F") $(date +"%T")" "- Running STAR alignment for STAR-Fusion ..."
+    
     singularity exec \
         --bind ${REFERENCE_DIR}:${REFERENCE_DIR} \
         --bind ${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR} \
@@ -27,7 +28,7 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
         STAR --genomeDir "${STAR_INDEX}" \
         --readFilesIn "$file" "${file//R1/R2}" \
         --outReadsUnmapped None \
-        --runThreadN 8 \
+        --runThreadN "${THREADS}" \
         --twopassMode Basic \
         --readFilesCommand "gunzip -c" \
         --outSAMstrandField intronMotif \
@@ -53,12 +54,11 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
         --outSAMtype BAM SortedByCoordinate \
         --quantMode GeneCounts \
         --outTmpDir "$tmp_dir" \
-        >& "${output_dir}/star_alignment_starfusion.log"
+        >& "${output_dir}/star_star_align.log"
 
     # Run samtools with singularity exec
-    echo "$(date +"%F") $(date +"%T")" "Indexing BAM file with samtools ..."
-    rm -rf "${output_dir}/Aligned.sortedByCoord.out.bam.bai"
-    
+    echo "$(date +"%F") $(date +"%T")" "- Indexing BAM file with samtools ..."
+
     singularity exec \
         --bind ${REFERENCE_DIR}:${REFERENCE_DIR} \
         --bind ${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR} \
@@ -67,7 +67,8 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
         samtools index "${output_dir}/Aligned.sortedByCoord.out.bam"
 
     # Run STAR-Fusion with singularity exec
-    echo "$(date +"%F") $(date +"%T")" "Running STAR-Fusion ..."
+    echo "$(date +"%F") $(date +"%T")" "- Running STAR Fusion ..."
+
     singularity exec \
         --bind ${REFERENCE_DIR}:${REFERENCE_DIR} \
         --bind ${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR} \
@@ -78,9 +79,9 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
         -J "$output_dir/Chimeric.out.junction" \
         --left_fq "$file" \
         --right_fq "${file//R1/R2}" \
-        --STAR_FUSION_DIR "$output_dir" \
+        --output_dir "${output_dir}" \
         --examine_coding_effect \
         --extract_fusion_reads \
         --FusionInspector inspect \
-        >& "${output_dir}/starfusion.log"
+        >& "${output_dir}/star_detect_fusion.log"
 done
