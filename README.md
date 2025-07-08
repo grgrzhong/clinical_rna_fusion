@@ -15,11 +15,16 @@ conda config --set solver libmamba
 conda config --add channels conda-forge
 
 ## Create environment with required software
-conda create -n rnafusion 
+conda create -n rnafusion apptainer parallel
 
 ```
 
 ## Runing pipeline
+
+- primary_seq_dir: directory contains raw fastq files
+- output_dir: directory to save the output files
+- parallel_jobs: number of jobs in parallel procesing samples
+
 ```bash
 rnafusion_pipeline <primary_seq_dir> <output_dir> <parallel_jobs>
 
