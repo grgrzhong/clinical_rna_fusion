@@ -8,8 +8,9 @@ editor_options:
 
 ```{r setup-packages, include=FALSE, eval=FALSE}
 # Bioconductor packages
-if (!require("BiocManager", quietly = TRUE))
+if (!require("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
+}
 BiocManager::install("txdbmaker")
 
 # CRAN packages
@@ -37,27 +38,31 @@ library(survminer)
 
 ```{r global-variables, include=FALSE}
 # Define global variables
-C1COL <- '#1839E7'
-C2COL <- '#E71839'
-C3COL <- 'purple'
+C1COL <- "#1839E7"
+C2COL <- "#E71839"
+C3COL <- "purple"
 
-CINSARC <- c("ANLN","ASPM","AURKA","AURKB","BIRC5","BORA","BUB1","BUB1B","CCNA2",
-             "CCNB1","CCNB2","CDC20","CDC45","CDC6","CDC7","CDCA2","CDCA3","CDCA8",
-             "CDK1","CENPA","CENPE","CENPL","CEP55","CHEK1","CKAP5","CKS2","ECT2",
-             "ESPL1","FANCI","FBXO5","FOXM1","H2AX","HP1BP3","KIF11","KIF14","KIF15",
-             "KIF18A","KIF20A","KIF23","KIF2C","KIF4A","MAD2L1","MCM2","MCM7","MELK",
-             "NCAPH","NDE1","NEK2","NUF2","OIP5","PBK","PLK4","PRC1","PTTG1","RAD51AP1",
-             "RNASEH2A","RRM2","SGO2","SMC2","SPAG5","SPC25","TOP2A","TPX2","TRIP13",
-             "TTK","UBE2C","ZWINT","KIFC1")
+CINSARC <- c(
+    "ANLN", "ASPM", "AURKA", "AURKB", "BIRC5", "BORA", "BUB1", "BUB1B", "CCNA2",
+    "CCNB1", "CCNB2", "CDC20", "CDC45", "CDC6", "CDC7", "CDCA2", "CDCA3", "CDCA8",
+    "CDK1", "CENPA", "CENPE", "CENPL", "CEP55", "CHEK1", "CKAP5", "CKS2", "ECT2",
+    "ESPL1", "FANCI", "FBXO5", "FOXM1", "H2AX", "HP1BP3", "KIF11", "KIF14", "KIF15",
+    "KIF18A", "KIF20A", "KIF23", "KIF2C", "KIF4A", "MAD2L1", "MCM2", "MCM7", "MELK",
+    "NCAPH", "NDE1", "NEK2", "NUF2", "OIP5", "PBK", "PLK4", "PRC1", "PTTG1", "RAD51AP1",
+    "RNASEH2A", "RRM2", "SGO2", "SMC2", "SPAG5", "SPC25", "TOP2A", "TPX2", "TRIP13",
+    "TTK", "UBE2C", "ZWINT", "KIFC1"
+)
 # CINSARC genes with different names (H2AFX, SGOL2)
-CINSARC_old=c("ANLN","ASPM","AURKA","AURKB","BIRC5","BORA","BUB1","BUB1B","CCNA2",
-          "CCNB1","CCNB2","CDC20","CDC45","CDC6","CDC7","CDCA2","CDCA3","CDCA8",
-          "CDK1","CENPA","CENPE","CENPL","CEP55","CHEK1","CKAP5","CKS2","ECT2",
-          "ESPL1","FANCI","FBXO5","FOXM1","H2AFX","HP1BP3","KIF11","KIF14","KIF15",
-          "KIF18A","KIF20A","KIF23","KIF2C","KIF4A","MAD2L1","MCM2","MCM7","MELK",
-          "NCAPH","NDE1","NEK2","NUF2","OIP5","PBK","PLK4","PRC1","PTTG1","RAD51AP1",
-          "RNASEH2A","RRM2","SGOL2","SMC2","SPAG5","SPC25","TOP2A","TPX2","TRIP13",
-          "TTK","UBE2C","ZWINT","KIFC1") # ,"KIFC1" add if needed
+CINSARC_old <- c(
+    "ANLN", "ASPM", "AURKA", "AURKB", "BIRC5", "BORA", "BUB1", "BUB1B", "CCNA2",
+    "CCNB1", "CCNB2", "CDC20", "CDC45", "CDC6", "CDC7", "CDCA2", "CDCA3", "CDCA8",
+    "CDK1", "CENPA", "CENPE", "CENPL", "CEP55", "CHEK1", "CKAP5", "CKS2", "ECT2",
+    "ESPL1", "FANCI", "FBXO5", "FOXM1", "H2AFX", "HP1BP3", "KIF11", "KIF14", "KIF15",
+    "KIF18A", "KIF20A", "KIF23", "KIF2C", "KIF4A", "MAD2L1", "MCM2", "MCM7", "MELK",
+    "NCAPH", "NDE1", "NEK2", "NUF2", "OIP5", "PBK", "PLK4", "PRC1", "PTTG1", "RAD51AP1",
+    "RNASEH2A", "RRM2", "SGOL2", "SMC2", "SPAG5", "SPC25", "TOP2A", "TPX2", "TRIP13",
+    "TTK", "UBE2C", "ZWINT", "KIFC1"
+) # ,"KIFC1" add if needed
 ```
 
 * CINSARC analysis
@@ -95,23 +100,23 @@ gene_annot$gene_id <- gsub("\\..*", "", gene_annot$gene_id)
 
 # Annotate and collapse counts
 counts_annot <- left_join(counts_df, gene_annot, by = "gene_id") %>%
-  mutate(gene_name = if_else(is.na(gene_name), gene_id, gene_name))
+    mutate(gene_name = if_else(is.na(gene_name), gene_id, gene_name))
 
 collapsed_counts <- counts_annot %>%
-  dplyr::select(-gene_id) %>%
-  group_by(gene_name) %>%
-  summarise(across(where(is.numeric), sum), .groups = "drop")
+    dplyr::select(-gene_id) %>%
+    group_by(gene_name) %>%
+    summarise(across(where(is.numeric), sum), .groups = "drop")
 
 final_counts <- collapsed_counts %>%
-  column_to_rownames("gene_name") %>%
-  as.matrix()
+    column_to_rownames("gene_name") %>%
+    as.matrix()
 
 # Gene length table for FPKM
 lengths_df <- tibble(gene_id = gsub("\\..*", "", gene_info$Geneid), length = gene_lengths) %>%
-  left_join(gene_annot, by = "gene_id") %>%
-  filter(!is.na(gene_name)) %>%
-  group_by(gene_name) %>%
-  summarise(length = max(length), .groups = "drop")
+    left_join(gene_annot, by = "gene_id") %>%
+    filter(!is.na(gene_name)) %>%
+    group_by(gene_name) %>%
+    summarise(length = max(length), .groups = "drop")
 
 matched_lengths <- lengths_df$length[match(rownames(final_counts), lengths_df$gene_name)]
 names(matched_lengths) <- rownames(final_counts)
@@ -125,7 +130,7 @@ log2_fpkm <- log2_fpkm[order(rownames(log2_fpkm)), order(colnames(log2_fpkm))]
 
 # Filter to CINSARC genes
 log2_fpkm_cinsarc <- log2_fpkm[rownames(log2_fpkm) %in% CINSARC, , drop = FALSE] %>%
-  .[order(rownames(.)), order(colnames(.))]
+    .[order(rownames(.)), order(colnames(.))]
 
 # Save outputs
 write.table(log2_fpkm, "log2_FPKM_normalized.txt", sep = "\t", quote = FALSE)
@@ -159,16 +164,16 @@ gene_annot$gene_id <- gsub("\\..*", "", gene_annot$gene_id)
 
 # Annotate and collapse counts
 counts_annot <- left_join(counts_df, gene_annot, by = "gene_id") %>%
-  mutate(gene_name = if_else(is.na(gene_name), gene_id, gene_name))
+    mutate(gene_name = if_else(is.na(gene_name), gene_id, gene_name))
 
 collapsed_counts <- counts_annot %>%
-  dplyr::select(-gene_id) %>%
-  group_by(gene_name) %>%
-  summarise(across(where(is.numeric), sum), .groups = "drop")
+    dplyr::select(-gene_id) %>%
+    group_by(gene_name) %>%
+    summarise(across(where(is.numeric), sum), .groups = "drop")
 
 final_counts <- collapsed_counts %>%
-  column_to_rownames("gene_name") %>%
-  as.matrix()
+    column_to_rownames("gene_name") %>%
+    as.matrix()
 
 
 # Add filtering: keep genes with >=10 reads in at least 10% of samples
@@ -177,10 +182,10 @@ final_counts <- final_counts[keep, ]
 
 # Gene length table for FPKM
 lengths_df <- tibble(gene_id = gsub("\\..*", "", gene_info$Geneid), length = gene_lengths) %>%
-  left_join(gene_annot, by = "gene_id") %>%
-  filter(!is.na(gene_name)) %>%
-  group_by(gene_name) %>%
-  summarise(length = max(length), .groups = "drop")
+    left_join(gene_annot, by = "gene_id") %>%
+    filter(!is.na(gene_name)) %>%
+    group_by(gene_name) %>%
+    summarise(length = max(length), .groups = "drop")
 
 matched_lengths <- lengths_df$length[match(rownames(final_counts), lengths_df$gene_name)]
 names(matched_lengths) <- rownames(final_counts)
@@ -194,12 +199,11 @@ log2_fpkm <- log2_fpkm[order(rownames(log2_fpkm)), order(colnames(log2_fpkm))]
 
 # Filter to CINSARC genes
 log2_fpkm_cinsarc <- log2_fpkm[rownames(log2_fpkm) %in% CINSARC, , drop = FALSE] %>%
-  .[order(rownames(.)), order(colnames(.))]
+    .[order(rownames(.)), order(colnames(.))]
 
 # Save outputs
 write.table(log2_fpkm, "log2_FPKM_normalized_filtered.txt", sep = "\t", quote = FALSE)
 write.table(log2_fpkm_cinsarc, "log2_FPKM_normalized_CINSARC_only_filtered.txt", sep = "\t", quote = FALSE)
-
 ```
 
 ```{r compute-centroids-and-predict}
@@ -218,83 +222,89 @@ clin_train <- pheno_data_c2[samples_c2, "metastasis:ch1", drop = FALSE]
 colnames(clin_train) <- "META"
 rownames(clin_train) <- samples_c2
 clin_train$META <- ifelse(tolower(clin_train$META) == "yes", 1,
-                          ifelse(tolower(clin_train$META) == "no", 0, NA))
+    ifelse(tolower(clin_train$META) == "no", 0, NA)
+)
 
 # Function to compute centroids
 cit.dfAggregate <- function(data, partition, MARGIN = 1, fAggreg = mean.na) {
-  cMARGIN <- setdiff(c(1, 2), MARGIN)
-  n <- length(partition)
-  N <- dim(data)[MARGIN]
-  p <- dim(data)[cMARGIN]
-  
-  # Debugging prints
-  cat("Dimension of data:", dim(data), "\n")
-  cat("MARGIN:", MARGIN, "\n")
-  cat("Length of partition:", n, "\n")
-  cat("Dimension of data along MARGIN:", N, "\n")
-  
-  if (n != N)
-    stop("Error - function cit.dfAggregate : size of partition doesn't correspond to data dimension")
-  
-  l <- split(1:N, partition)
-  d <- data
-  
-  if (MARGIN == 2)
-    d <- t(data)
-  
-  d <- matrix(sapply(l, function(i) if (length(i) == 1) {
-    unlist(d[i, ])
-  } else {
-    apply(d[i, ], 2, fAggreg)
-  }), ncol = p, byrow = TRUE)
-  
-  d <- as.data.frame(d)
-  rownames(d) <- names(l)
-  names(d) <- dimnames(data)[[cMARGIN]]
-  
-  if (MARGIN == 2)
-    d <- as.data.frame(t(d))
-  
-  d
+    cMARGIN <- setdiff(c(1, 2), MARGIN)
+    n <- length(partition)
+    N <- dim(data)[MARGIN]
+    p <- dim(data)[cMARGIN]
+
+    # Debugging prints
+    cat("Dimension of data:", dim(data), "\n")
+    cat("MARGIN:", MARGIN, "\n")
+    cat("Length of partition:", n, "\n")
+    cat("Dimension of data along MARGIN:", N, "\n")
+
+    if (n != N) {
+        stop("Error - function cit.dfAggregate : size of partition doesn't correspond to data dimension")
+    }
+
+    l <- split(1:N, partition)
+    d <- data
+
+    if (MARGIN == 2) {
+        d <- t(data)
+    }
+
+    d <- matrix(sapply(l, function(i) {
+        if (length(i) == 1) {
+            unlist(d[i, ])
+        } else {
+            apply(d[i, ], 2, fAggreg)
+        }
+    }), ncol = p, byrow = TRUE)
+
+    d <- as.data.frame(d)
+    rownames(d) <- names(l)
+    names(d) <- dimnames(data)[[cMARGIN]]
+
+    if (MARGIN == 2) {
+        d <- as.data.frame(t(d))
+    }
+
+    d
 }
 computeCentroids <- function(clin_train, expr_train, COL_EVENT) {
-  stopifnot(COL_EVENT %in% colnames(clin_train))
-  stopifnot(all(clin_train$META %in% c(0, 1)))
-  stopifnot(all(rownames(clin_train) %in% colnames(expr_train)))
-  cl <- rep(NA, ncol(expr_train))
-  names(cl) <- colnames(expr_train)
-  for (sample in colnames(expr_train)) {
-    if (sample %in% rownames(clin_train)) {
-      cl[sample] <- clin_train[sample, COL_EVENT]
-    } else {
-      warning(paste("Sample", sample, "not found in clin_train"))
+    stopifnot(COL_EVENT %in% colnames(clin_train))
+    stopifnot(all(clin_train$META %in% c(0, 1)))
+    stopifnot(all(rownames(clin_train) %in% colnames(expr_train)))
+    cl <- rep(NA, ncol(expr_train))
+    names(cl) <- colnames(expr_train)
+    for (sample in colnames(expr_train)) {
+        if (sample %in% rownames(clin_train)) {
+            cl[sample] <- clin_train[sample, COL_EVENT]
+        } else {
+            warning(paste("Sample", sample, "not found in clin_train"))
+        }
     }
-  }
-  
-  # Print for debugging
-  cat("cl vector:\n")
-  print(cl)
-  
-  # Scale and transpose expression data
-  dd <- t(scale(t(expr_train), scale = FALSE))
-  
-  # Print for debugging
-  cat("Scaled and transposed expression data (dd):\n")
-  print(head(dd))
-  
-  # Compute centroids
-  L <- list()
-  L$centroids <- cit.dfAggregate(dd, cl, MARGIN = 2, fAggreg = mean)
-  
-  return(L)
+
+    # Print for debugging
+    cat("cl vector:\n")
+    print(cl)
+
+    # Scale and transpose expression data
+    dd <- t(scale(t(expr_train), scale = FALSE))
+
+    # Print for debugging
+    cat("Scaled and transposed expression data (dd):\n")
+    print(head(dd))
+
+    # Compute centroids
+    L <- list()
+    L$centroids <- cit.dfAggregate(dd, cl, MARGIN = 2, fAggreg = mean)
+
+    return(L)
 }
 
 # Function to apply centroids
-applyCentroids=function(DF,L) {
-  stopifnot(identical(rownames(DF),rownames(L$centroids)))
-  tdist=data.frame(1-cor(t(scale(t(DF),scale=F))[rownames(L$centroids),],L$centroids,method="spearman"),stringsAsFactors=F)
-  tdist$pred=paste0("C",apply(tdist,1,which.min))
-  return(tdist)
+applyCentroids <- function(DF, L) {
+    stopifnot(identical(rownames(DF), rownames(L$centroids)))
+    tdist <- data.frame(1 - cor(t(scale(t(DF), scale = F))[rownames(L$centroids), ], L$centroids, method = "spearman"), stringsAsFactors = F)
+    tdist$pred <- paste0("C", apply(tdist, 1, which.min))
+    return(tdist)
 }
 
 # Run centroid analysis
@@ -318,12 +328,14 @@ Three elements required for construction of Kaplan-Meier Curve
 ```{r survival-analysis}
 # Load and preprocess phenotype data
 STUMP_clin <- readxl::read_excel("/Users/yuewen/Library/CloudStorage/OneDrive-TheUniversityOfHongKong/MY_Lab/Dry Lab/CINSARC/Data Analysis/STUMP/Input/phenoData_STUMP_Meth.xlsx") %>%
-  dplyr::select(Sample_Name, Recurrence, RFS.Time, Death, OS.Time) %>%
-  mutate(OS.Time = OS.Time / 12,
-         RFS.Time = RFS.Time / 12,
-         Death = ifelse(Death == "Yes", 1, 0),
-         Recurrence = ifelse(Recurrence == "Yes", 1, 0)) %>%
-  column_to_rownames("Sample_Name")
+    dplyr::select(Sample_Name, Recurrence, RFS.Time, Death, OS.Time) %>%
+    mutate(
+        OS.Time = OS.Time / 12,
+        RFS.Time = RFS.Time / 12,
+        Death = ifelse(Death == "Yes", 1, 0),
+        Recurrence = ifelse(Recurrence == "Yes", 1, 0)
+    ) %>%
+    column_to_rownames("Sample_Name")
 
 # Match samples with expression data
 common_samples <- intersect(colnames(expr_test_aligned), rownames(STUMP_clin))
@@ -333,44 +345,50 @@ CINSARC_test <- CINSARC_test[common_samples, ]
 STUMP_clin$CINSARC <- CINSARC_test$pred
 
 # Kaplan-Meier function
-myKM=function(a,col_Event,col_Time,col_Pred,MAIN,C1COL,C2COL,
-                modifiedYlab="Recurrence-free survival probability",modifiedC1lab="low-risk profile",
-                modifiedC2lab="high-risk profile",
-                xlab="Time (years)",lwd=2) {
+myKM <- function(a, col_Event, col_Time, col_Pred, MAIN, C1COL, C2COL,
+                 modifiedYlab = "Recurrence-free survival probability", modifiedC1lab = "low-risk profile",
+                 modifiedC2lab = "high-risk profile",
+                 xlab = "Time (years)", lwd = 2) {
     stopifnot(col_Event %in% colnames(a))
-    stopifnot(col_Time%in% colnames(a))
+    stopifnot(col_Time %in% colnames(a))
     stopifnot(col_Pred %in% colnames(a))
-    stopifnot(identical(c("C1","C2"),sort(unique(as.character(a[,col_Pred])))))
-    if (is.character(a[,col_Pred])) a[,col_Pred]=factor(a[,col_Pred],levels=c("C1","C2"))
-    index=which(apply(a[,c(col_Event,col_Time,col_Pred)],1,function(x) length(which(is.na(x) | x=="")))>0)
-    if (length(index)>0) a=a[-index,]
+    stopifnot(identical(c("C1", "C2"), sort(unique(as.character(a[, col_Pred])))))
+    if (is.character(a[, col_Pred])) a[, col_Pred] <- factor(a[, col_Pred], levels = c("C1", "C2"))
+    index <- which(apply(a[, c(col_Event, col_Time, col_Pred)], 1, function(x) length(which(is.na(x) | x == ""))) > 0)
+    if (length(index) > 0) a <- a[-index, ]
     rm(index)
-    C1=length(which(a[,col_Pred]=="C1"))
-    C2=length(which(a[,col_Pred]=="C2"))
-    eC1=length(which(a[,col_Pred]=="C1" & a[,col_Event]==1))
-    eC2=length(which(a[,col_Pred]=="C2" & a[,col_Event]==1))
+    C1 <- length(which(a[, col_Pred] == "C1"))
+    C2 <- length(which(a[, col_Pred] == "C2"))
+    eC1 <- length(which(a[, col_Pred] == "C1" & a[, col_Event] == 1))
+    eC2 <- length(which(a[, col_Pred] == "C2" & a[, col_Event] == 1))
     if (!is.numeric(a[[col_Time]]) || !is.numeric(a[[col_Event]])) {
-      a[[col_Time]] <- as.numeric(a[[col_Time]])
-      a[[col_Event]] <- as.numeric(a[[col_Event]])
-      }
-    SD=survdiff(Surv(a[,col_Time], a[,col_Event])~a[,col_Pred]) # p log-rank
-    stopifnot(length(SD$n)-1==1) # 1 degree of freedom
-    Pval=pchisq(SD$chisq,1,lower.tail=F)
-    COXPH=summary(coxph(Surv(a[,col_Time], a[,col_Event])~a[,col_Pred])) # Cox PH
-    HR=round(COXPH$conf.int[1],2)
-    HR_CI_DN=round(COXPH$conf.int[3],2)
-    HR_CI_UP=round(COXPH$conf.int[4],2)
+        a[[col_Time]] <- as.numeric(a[[col_Time]])
+        a[[col_Event]] <- as.numeric(a[[col_Event]])
+    }
+    SD <- survdiff(Surv(a[, col_Time], a[, col_Event]) ~ a[, col_Pred]) # p log-rank
+    stopifnot(length(SD$n) - 1 == 1) # 1 degree of freedom
+    Pval <- pchisq(SD$chisq, 1, lower.tail = F)
+    COXPH <- summary(coxph(Surv(a[, col_Time], a[, col_Event]) ~ a[, col_Pred])) # Cox PH
+    HR <- round(COXPH$conf.int[1], 2)
+    HR_CI_DN <- round(COXPH$conf.int[3], 2)
+    HR_CI_UP <- round(COXPH$conf.int[4], 2)
     View(COXPH$conf.int)
-    #rm(COXPH)
-    sur.all=survfit(Surv(a[,col_Time],a[,col_Event])~strata(a[,col_Pred]),data=a) # Kaplan-Meier
-    plot(sur.all,col=c(C1COL,C2COL),ylab=modifiedYlab,xlab=xlab,las=0,xaxs='i',xlim=c(-0.05,max(a[,col_Time])),
-         main=MAIN,lwd=lwd,cex.main=2,mark.time=T,cex.lab=1.25)
-    text(x=max(a[,col_Time])/2,y=0.94,labels=paste0("HR = ",HR," [",HR_CI_DN,"-",HR_CI_UP,"]"),cex=1.125)
-    text(x=max(a[,col_Time])/2,y=0.85, labels=bquote(italic(P)['log-rank'] ~ "=" ~ .(scientific_format(3)(Pval))), cex=1.125)
-    legend('bottomleft',legend=c(as.expression(bquote(.(modifiedC1lab)~"("*italic(n)*.("=")*.(C1)*"):"~.(eC1)~events)),
-                              as.expression(bquote(.(modifiedC2lab)~"("*italic(n)*.("=")*.(C2)*"):"~.(eC2)~events))),
-           lwd=lwd,pch="-",bg="white",cex=1.125,border=NA,col=c(C1COL,C2COL),bty='n')
-  }  
+    # rm(COXPH)
+    sur.all <- survfit(Surv(a[, col_Time], a[, col_Event]) ~ strata(a[, col_Pred]), data = a) # Kaplan-Meier
+    plot(sur.all,
+        col = c(C1COL, C2COL), ylab = modifiedYlab, xlab = xlab, las = 0, xaxs = "i", xlim = c(-0.05, max(a[, col_Time])),
+        main = MAIN, lwd = lwd, cex.main = 2, mark.time = T, cex.lab = 1.25
+    )
+    text(x = max(a[, col_Time]) / 2, y = 0.94, labels = paste0("HR = ", HR, " [", HR_CI_DN, "-", HR_CI_UP, "]"), cex = 1.125)
+    text(x = max(a[, col_Time]) / 2, y = 0.85, labels = bquote(italic(P)["log-rank"] ~ "=" ~ .(scientific_format(3)(Pval))), cex = 1.125)
+    legend("bottomleft",
+        legend = c(
+            as.expression(bquote(.(modifiedC1lab) ~ "(" * italic(n) * .("=") * .(C1) * "):" ~ .(eC1) ~ events)),
+            as.expression(bquote(.(modifiedC2lab) ~ "(" * italic(n) * .("=") * .(C2) * "):" ~ .(eC2) ~ events))
+        ),
+        lwd = lwd, pch = "-", bg = "white", cex = 1.125, border = NA, col = c(C1COL, C2COL), bty = "n"
+    )
+}
 # Run survival plots
 myKM(STUMP_clin, "Death", "OS.Time", "CINSARC", "Overall Survival by CINSARC", C1COL, C2COL)
 myKM(STUMP_clin, "Recurrence", "RFS.Time", "CINSARC", "RFS by CINSARC", C1COL, C2COL)
