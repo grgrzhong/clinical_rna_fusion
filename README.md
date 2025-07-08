@@ -13,6 +13,8 @@ fi
 conda update -y -n base -c defaults conda
 conda config --set solver libmamba
 conda config --add channels conda-forge
+conda config --set always_yes true
+conda config --set auto_activate_base false
 
 ## Create environment with required software
 conda create -n rnafusion apptainer parallel

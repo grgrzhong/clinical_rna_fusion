@@ -26,7 +26,7 @@ star_fusion() {
         --bind "${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR}" \
         --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
         --bind /tmp:/tmp \
-        "${CONTAINER_DIR}/star-fusion.v1.15.0.simg" \
+        "${CONTAINER_DIR}/star-fusion.sif" \
         STAR --genomeDir "${STAR_INDEX}" \
         --readFilesIn "$file1" "$file2" \
         --outReadsUnmapped None \
@@ -65,7 +65,7 @@ star_fusion() {
         --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
         --bind "${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR}" \
         --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
-        "${CONTAINER_DIR}/star-fusion.v1.15.0.simg" \
+        "${CONTAINER_DIR}/star-fusion.sif" \
         samtools index "${output_dir}/Aligned.sortedByCoord.out.bam"
 
     # Run STAR-Fusion with singularity exec
@@ -75,7 +75,7 @@ star_fusion() {
         --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
         --bind "${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR}" \
         --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
-        "${CONTAINER_DIR}/star-fusion.v1.15.0.simg" \
+        "${CONTAINER_DIR}/star-fusion.sif" \
         STAR-Fusion \
         --genome_lib_dir "$CTAT_RESOURCE_LIB" \
         -J "$output_dir/Chimeric.out.junction" \

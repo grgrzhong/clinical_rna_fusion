@@ -30,7 +30,7 @@ arriba_fusion(){
         --bind "${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR}" \
         --bind "${ARRIBA_DIR}:${ARRIBA_DIR}" \
         --bind /tmp:/tmp \
-        "${CONTAINER_DIR}/star-fusion.v1.15.0.simg" \
+        "${CONTAINER_DIR}/star-fusion.sif" \
         STAR \
         --runThreadN "${THREADS}" \
         --genomeDir "${STAR_INDEX}" \
@@ -63,7 +63,7 @@ arriba_fusion(){
         --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
         --bind "${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR}" \
         --bind "${ARRIBA_DIR}:${ARRIBA_DIR}" \
-        "${CONTAINER_DIR}/star-fusion.v1.15.0.simg" \
+        "${CONTAINER_DIR}/star-fusion.sif" \
         samtools index "${output_dir}/Aligned.sortedByCoord.out.bam"
 
     ## Run Arriba for fusion detection

@@ -50,7 +50,7 @@ singularity_dir=/mnt/f/projects/250702_RNA_fusion/containers
 #     --bind ${ref_dir}:${ref_dir} \
 #     --bind ${input_trimmed_dir}:${input_trimmed_dir} \
 #     --bind ${output_dir}:${output_dir} \
-#     ${singularity_dir}/star-fusion.v1.15.0.simg
+#     ${singularity_dir}/star-fusion.sif
 
 STARINDEX=${ref_dir}/Gencode/STAR_index/
 REFERENCE=${ref_dir}/Gencode/gencode.hg38.v36.primary_assembly.fa
@@ -93,7 +93,7 @@ for file in $(ls ${input_trimmed_dir}/*.fastq.gz | grep "R1"); do
         --bind ${input_trimmed_dir}:${input_trimmed_dir} \
         --bind ${output_dir}:${output_dir} \
         --bind /tmp:/tmp \
-        ${singularity_dir}/star-fusion.v1.15.0.simg \
+        ${singularity_dir}/star-fusion.sif \
         STAR --genomeDir $STARINDEX \
             --readFilesIn $file ${file//R1/R2} \
             --outReadsUnmapped None \
@@ -132,7 +132,7 @@ for file in $(ls ${input_trimmed_dir}/*.fastq.gz | grep "R1"); do
         --bind ${ref_dir}:${ref_dir} \
         --bind ${input_trimmed_dir}:${input_trimmed_dir} \
         --bind ${output_dir}:${output_dir} \
-        ${singularity_dir}/star-fusion.v1.15.0.simg \
+        ${singularity_dir}/star-fusion.sif \
         samtools index ${OUTPUT}/Aligned.sortedByCoord.out.bam
 
     # Run STAR-Fusion with singularity exec
@@ -140,7 +140,7 @@ for file in $(ls ${input_trimmed_dir}/*.fastq.gz | grep "R1"); do
         --bind ${ref_dir}:${ref_dir} \
         --bind ${input_trimmed_dir}:${input_trimmed_dir} \
         --bind ${output_dir}:${output_dir} \
-        ${singularity_dir}/star-fusion.v1.15.0.simg \
+        ${singularity_dir}/star-fusion.sif \
         STAR-Fusion --genome_lib_dir $CTAT_RESOURCE_LIB \
                     -J $OUTPUT/Chimeric.out.junction \
                     --left_fq $file \

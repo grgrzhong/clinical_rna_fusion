@@ -17,6 +17,6 @@ singularity pull --force --dir "${container_dir}" r.sif oras://community.wave.se
 singularity pull --force --dir "${container_dir}" samtools.sif oras://community.wave.seqera.io/library/samtools:1.21--84c9d77c3901e90b
 
 ## Download STAR-Fusion containers https://data.broadinstitute.org/Trinity/CTAT_SINGULARITY/STAR-Fusion/
-singularity pull --force --dir "${container_dir}" star-fusion.v1.15.0.simg https://data.broadinstitute.org/Trinity/CTAT_SINGULARITY/STAR-Fusion/star-fusion.v1.15.0.simg
+singularity pull --force --dir "${container_dir}" star-fusion.sif https://data.broadinstitute.org/Trinity/CTAT_SINGULARITY/STAR-Fusion/star-fusion.v1.15.1.simg
 
 singularity pull --force --dir "${container_dir}" subread.sif oras://community.wave.seqera.io/library/subread:2.1.1--bae420bffb4edf16

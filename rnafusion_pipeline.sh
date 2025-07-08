@@ -40,8 +40,8 @@ export PRIMARY_SEQ_DIR="${1:-${PROJECT_DIR}/data/primary_seq}"
 export RESULTS_DIR="${2:-${PROJECT_DIR}/results}"
 export FASTQ_TRIM_DIR="${RESULTS_DIR}/fastq_trimmed"
 export FASTQC_TRIM_DIR="${RESULTS_DIR}/fastqc_trimmed"
-export ARRIBA_DIR="${RESULTS_DIR}/output"
-export STAR_FUSION_DIR="${RESULTS_DIR}/output"
+export ARRIBA_DIR="${RESULTS_DIR}/fusion_report"
+export STAR_FUSION_DIR="${RESULTS_DIR}/fusion_report"
 export FEATURE_COUNTS_DIR="${RESULTS_DIR}/feature_counts"
 
 # Number of threads to use for parallel processing for a sample
