@@ -2,11 +2,10 @@
 
 
 ## Loop through all fastq.gz files in the trimmed fastq directory
-for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
+star_fusion() {
+    local sample="$1"
 
-    echo "$(date +"%F") $(date +"%T")" "Processing sample = ${file}"
-
-    sample=$(basename "$file" | cut -d "_" -f 1)
+    echo "$(date +"%F") $(date +"%T")" "Processing sample = ${sample}"
 
     ## Create output directory for STAR-Fusion results
     output_dir=${STAR_FUSION_DIR}/${sample}/
@@ -19,14 +18,17 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
     ## Run STAR alignment for STAR-Fusion
     echo "$(date +"%F") $(date +"%T")" "- Running STAR alignment for STAR-Fusion ..."
     
+    file1="${FASTQ_TRIM_DIR}/${sample}/${sample}_trimmed_R1.fastq.gz"
+    file2="${FASTQ_TRIM_DIR}/${sample}/${sample}_trimmed_R2.fastq.gz"
+
     singularity exec \
-        --bind ${REFERENCE_DIR}:${REFERENCE_DIR} \
-        --bind ${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR} \
-        --bind ${STAR_FUSION_DIR}:${STAR_FUSION_DIR} \
+        --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
+        --bind "${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR}" \
+        --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
         --bind /tmp:/tmp \
-        ${CONTAINER_DIR}/star-fusion.v1.15.0.simg \
+        "${CONTAINER_DIR}/star-fusion.v1.15.0.simg" \
         STAR --genomeDir "${STAR_INDEX}" \
-        --readFilesIn "$file" "${file//R1/R2}" \
+        --readFilesIn "$file1" "$file2" \
         --outReadsUnmapped None \
         --runThreadN "${THREADS}" \
         --twopassMode Basic \
@@ -60,9 +62,9 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
     echo "$(date +"%F") $(date +"%T")" "- Indexing BAM file with samtools ..."
 
     singularity exec \
-        --bind ${REFERENCE_DIR}:${REFERENCE_DIR} \
-        --bind ${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR} \
-        --bind ${STAR_FUSION_DIR}:${STAR_FUSION_DIR} \
+        --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
+        --bind "${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR}" \
+        --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
         "${CONTAINER_DIR}/star-fusion.v1.15.0.simg" \
         samtools index "${output_dir}/Aligned.sortedByCoord.out.bam"
 
@@ -70,18 +72,30 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
     echo "$(date +"%F") $(date +"%T")" "- Running STAR Fusion ..."
 
     singularity exec \
-        --bind ${REFERENCE_DIR}:${REFERENCE_DIR} \
-        --bind ${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR} \
-        --bind ${STAR_FUSION_DIR}:${STAR_FUSION_DIR} \
+        --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
+        --bind "${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR}" \
+        --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
         "${CONTAINER_DIR}/star-fusion.v1.15.0.simg" \
         STAR-Fusion \
         --genome_lib_dir "$CTAT_RESOURCE_LIB" \
         -J "$output_dir/Chimeric.out.junction" \
-        --left_fq "$file" \
-        --right_fq "${file//R1/R2}" \
+        --left_fq "$file1" \
+        --right_fq "$file2" \
         --output_dir "${output_dir}" \
         --examine_coding_effect \
         --extract_fusion_reads \
         --FusionInspector inspect \
         >& "${output_dir}/star_detect_fusion.log"
-done
+}
+
+# Export the function to be used by GNU parallel
+export -f star_fusion
+
+# Process samples in parallel
+samples=$(find "${FASTQ_TRIM_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+
+echo "$samples" |
+    parallel \
+        --jobs "$JOBS" \
+        --progress \
+        star_fusion {}

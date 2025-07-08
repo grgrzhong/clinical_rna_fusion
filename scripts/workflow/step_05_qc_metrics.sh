@@ -5,7 +5,8 @@
 # This script collects quality control metrics for RNA-Seq data using Picard
 
 ## Collect HS metrics for each sample in STAR_FUSION_DIR
-for sample in $(find "$STAR_FUSION_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n"); do
+generate_qc_metrics() {
+    local sample="$1"
 
     echo "$(date +"%F") $(date +"%T") - Processing sample = ${sample}"
 
@@ -14,7 +15,7 @@ for sample in $(find "$STAR_FUSION_DIR" -mindepth 1 -maxdepth 1 -type d -printf 
     ## Check if input BAM file exists
     if [[ ! -f "$input_bam" ]]; then
         echo "Warning: Input BAM file not found: $input_bam"
-        continue
+        return 1
     fi
     
     # CollectHsMetrics information
@@ -89,5 +90,15 @@ for sample in $(find "$STAR_FUSION_DIR" -mindepth 1 -maxdepth 1 -type d -printf 
         --rna_metrics "${multiqc_dir}/${multiqc_filename}_data/multiqc_picard_RnaSeqMetrics.txt" \
         --sample_name "${sample}" \
         --output_csv "${STAR_FUSION_DIR}/${sample}/${sample}_RnaSeqMetrics.csv"
+}
 
-done
+# Export the function for parallel execution
+export -f generate_qc_metrics
+
+# Process samples in parallel
+samples=$(find "${STAR_FUSION_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+echo "$samples" |
+    parallel \
+        --jobs "$JOBS" \
+        --progress \
+        generate_qc_metrics {}

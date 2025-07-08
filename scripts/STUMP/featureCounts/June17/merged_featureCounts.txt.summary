@@ -1,0 +1,15 @@
+Status	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S62_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S63_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S64_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S67_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S68_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S69_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S71_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S72_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S73_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S75_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S13_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S16_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S18_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S25_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S54_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S55_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S56_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S58_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S59_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S60_dedup.bam	/media/hkusarc/Data/STUMP_RNA_seq_ALL/CINSARC_output/Deduplicated/S61_dedup.bam
+Assigned	1286398	1650079	530463	2282211	1342978	725620	1413736	1985756	1684316	405611	1981262	124366	512377	573940	752600	693460	3361426	811847	2137072	676810	877984
+Unassigned_Unmapped	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Read_Type	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_MultiMapping	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Secondary	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_NoFeatures	21309782	15848912	2665615	40033286	9952611	9458322	16927063	29703098	26053732	2743204	23571393	767379	3928262	3616331	6778515	5151909	49825461	7430014	31870794	6088506	6320473
+Unassigned_Overlapping_Length	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Unassigned_Ambiguity	42710	64375	21468	90045	51811	36560	50205	71478	62450	12675	66995	6031	19903	22175	28613	34501	124827	29735	81190	28840	37517

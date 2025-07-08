@@ -6,24 +6,15 @@
 #############################################################################
 
 # Iterate over all sample directories in STARFusion directory
-for sample in $(find "$STAR_FUSION_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n"); do
+fusion_report() {
+
+    local sample="$1"
 
     echo "$(date +"%F") $(date +"%T") - Processing sample = ${sample}"
 
     # Arriba and STAR fusion data
     arriba_fusion_file="$STAR_FUSION_DIR/$sample/fusions.tsv"
     star_fusion_file="$STAR_FUSION_DIR/$sample/star-fusion.fusion_predictions.tsv"
-
-    # Check if input files exist
-    if [[ ! -f "$arriba_fusion_file" ]]; then
-        echo "Warning: Arriba fusion file not found: $arriba_fusion_file"
-        continue
-    fi
-
-    if [[ ! -f "$star_fusion_file" ]]; then
-        echo "Warning: STAR-Fusion file not found: $star_fusion_file"
-        continue
-    fi
 
     # Output directory
     output_dir="$STAR_FUSION_DIR/$sample/fusion_report"
@@ -43,4 +34,16 @@ for sample in $(find "$STAR_FUSION_DIR" -mindepth 1 -maxdepth 1 -type d -printf 
         --no-cosmic \
         --allow-multiple-gene-symbols \
         >&"${output_dir}/fusion_report.log"
-done
+}
+
+# Export the function for parallel execution
+export -f fusion_report
+
+# Process samples in parallel
+samples=$(find "${STAR_FUSION_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+
+echo "$samples" |
+    parallel \
+        --jobs "$JOBS" \
+        --progress \
+        fusion_report {}

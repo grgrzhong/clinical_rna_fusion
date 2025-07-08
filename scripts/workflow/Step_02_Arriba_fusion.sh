@@ -6,11 +6,10 @@
 #############################################################################
 
 # Loop through all fastq.gz files in the trimmed fastq directory
-for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
+arriba_fusion(){
+    local sample="$1"
 
-    echo "$(date +"%F") $(date +"%T")" "Processing sample = ${file}"
-    
-    sample=$(basename "$file" | cut -d "_" -f 1)
+    echo "$(date +"%F") $(date +"%T")" "- Processing sample = ${sample}"
 
     ## Create output directory for STAR-Fusion results
     output_dir=${ARRIBA_DIR}/${sample}/
@@ -21,20 +20,23 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
     rm -rf "$tmp_dir"
 
     ## Run STAR alignment for Arriba
-    echo "$(date +"%F") $(date +"%T")" "Running STAR alignment for Arriba ..."
+    echo "$(date +"%F") $(date +"%T")" "- Running STAR alignment for Arriba ..."
+    
+    file1="${FASTQ_TRIM_DIR}/${sample}/${sample}_trimmed_R1.fastq.gz"
+    file2="${FASTQ_TRIM_DIR}/${sample}/${sample}_trimmed_R2.fastq.gz"
     
     singularity exec \
-        --bind ${REFERENCE_DIR}:${REFERENCE_DIR} \
-        --bind ${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR} \
-        --bind ${ARRIBA_DIR}:${ARRIBA_DIR} \
+        --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
+        --bind "${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR}" \
+        --bind "${ARRIBA_DIR}:${ARRIBA_DIR}" \
         --bind /tmp:/tmp \
         "${CONTAINER_DIR}/star-fusion.v1.15.0.simg" \
         STAR \
         --runThreadN "${THREADS}" \
         --genomeDir "${STAR_INDEX}" \
-        --readFilesIn "${file}" "${file//R1/R2}" \
+        --readFilesIn "${file1}" "${file2}" \
         --readFilesCommand "gunzip -c" \
-        --outFileNamePrefix "$output_dir" \
+        --outFileNamePrefix "${output_dir}" \
         --outSAMtype BAM SortedByCoordinate \
         --outSAMunmapped Within \
         --outBAMcompression 0 \
@@ -49,23 +51,23 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
         --chimScoreJunctionNonGTAG 0 \
         --chimScoreSeparation 1 \
         --chimSegmentReadGapMax 3 \
-        --outTmpDir "$tmp_dir" \
+        --outTmpDir "${tmp_dir}" \
         --chimMultimapNmax 50 \
         >& "${output_dir}/arriba_star_align.log"
 
     ## Index the BAM file
-    echo "$(date +"%F") $(date +"%T")" "Indexing BAM file with samtools ..."
+    echo "$(date +"%F") $(date +"%T")" "- Indexing BAM file with samtools ..."
     rm -rf "${output_dir}/Aligned.sortedByCoord.out.bam.bai"
     
     singularity exec \
-        --bind ${REFERENCE_DIR}:${REFERENCE_DIR} \
-        --bind ${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR} \
-        --bind ${ARRIBA_DIR}:${ARRIBA_DIR} \
+        --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
+        --bind "${FASTQ_TRIM_DIR}:${FASTQ_TRIM_DIR}" \
+        --bind "${ARRIBA_DIR}:${ARRIBA_DIR}" \
         "${CONTAINER_DIR}/star-fusion.v1.15.0.simg" \
         samtools index "${output_dir}/Aligned.sortedByCoord.out.bam"
 
     ## Run Arriba for fusion detection
-    echo "$(date +"%F") $(date +"%T")" "Running Arriba for fusion detection ..."
+    echo "$(date +"%F") $(date +"%T")" "- Running Arriba for fusion detection ..."
     
     singularity exec \
         --bind "${REFERENCE_DIR}":"${REFERENCE_DIR}" \
@@ -76,16 +78,16 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
         -x "${output_dir}/Aligned.sortedByCoord.out.bam" \
         -o "${output_dir}/fusions.tsv" \
         -O "${output_dir}/fusions.discarded.tsv" \
-        -a "$REFERENCE" \
-        -g "$ANNOTATION" \
-        -b "$BLACKLIST" \
-        -k "$KNOWN_FUSION" \
-        -t "$KNOWN_FUSION" \
-        -p "$PROTEIN_DOMAINS" \
+        -a "${REFERENCE}" \
+        -g "${ANNOTATION}" \
+        -b "${BLACKLIST}" \
+        -k "${KNOWN_FUSION}" \
+        -t "${KNOWN_FUSION}" \
+        -p "${PROTEIN_DOMAINS}" \
         >& "${output_dir}/arriba_detect_fusion.log"
 
     ## Draw Arriba fusions
-    echo "$(date +"%F") $(date +"%T")" "Drawing Arriba fusions ..."
+    echo "$(date +"%F") $(date +"%T")" "- Drawing Arriba fusions ..."
     
     singularity exec \
         --bind "${REFERENCE_DIR}":"${REFERENCE_DIR}" \
@@ -95,15 +97,27 @@ for file in $(ls ${FASTQ_TRIM_DIR}/*.fastq.gz | grep "R1"); do
         draw_fusions.R \
         --fusions="${output_dir}/fusions.tsv" \
         --output="${output_dir}/fusions.pdf" \
-        --annotation="$ANNOTATION" \
-        --cytobands="$CYTOBANDS" \
-        --proteinDomains="$PROTEIN_DOMAINS" \
+        --annotation="${ANNOTATION}" \
+        --cytobands="${CYTOBANDS}" \
+        --proteinDomains="${PROTEIN_DOMAINS}" \
         --minConfidenceForCircosPlot=none \
         --mergeDomainsOverlappingBy=0.5 \
         >& "${output_dir}/arriba_draw_fusions.log"
 
     ## Keep only files start with "fusions" and log files in the output directory
-    echo "$(date +"%F") $(date +"%T")" "Keeping only relevant files in output directory for Arriba ..."
+    echo "$(date +"%F") $(date +"%T")" "- Keeping only relevant files in output directory for Arriba ..."
     find "$output_dir" -type f ! -name "fusions*" ! -name "*.log" -exec rm -f {} \;
 
-done
+}
+
+# Export the function for parallel execution
+export -f arriba_fusion
+
+# Process samples in parallel
+samples=$(find "${FASTQ_TRIM_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+
+echo "$samples" |
+    parallel \
+        --jobs "$JOBS" \
+        --progress \
+        arriba_fusion {}
