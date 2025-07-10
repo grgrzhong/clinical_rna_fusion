@@ -1,4 +1,4 @@
-## Install software
+## Install tools
 ```bash
 ## Install conda
 wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh"
@@ -16,20 +16,20 @@ conda config --add channels conda-forge
 conda config --set always_yes true
 conda config --set auto_activate_base false
 
-## Create environment with required software
+## Create environment with required tools
 conda create -n rnafusion apptainer parallel
 
 ```
 
 ## Runing pipeline
 
-- primary_seq_dir: directory contains raw fastq files
-- output_dir: directory to save the output files
+Arguments to run the rnafusion pipeline:
+
+- input_dir: directory contains raw fastq files, must be absolute path
+- output_dir: directory to save the output files, must be absolute path
 - parallel_jobs: number of jobs in parallel procesing samples
+- star_jobs: number of jobs in parallel parallel procesing samples for running STAR alignment, each job takes 16 threads (default)
 
 ```bash
-rnafusion_pipeline <primary_seq_dir> <output_dir> <parallel_jobs>
-
-## example
-rnafusion_pipeline 
+rnafusion_pipeline <input_dir> <output_dir> <parallel_jobs> <star_jobs>
 ```

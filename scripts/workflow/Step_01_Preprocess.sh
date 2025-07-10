@@ -13,13 +13,13 @@ preprocess() {
     ## Trim the fastq files using fastp
     singularity exec \
         --bind "${PROJECT_DIR}":"${PROJECT_DIR}" \
-        --bind "${PRIMARY_SEQ_DIR}":"${PRIMARY_SEQ_DIR}" \
+        --bind "${INPUT_DIR}":"${INPUT_DIR}" \
         --bind "${FASTQ_TRIM_DIR}":"${FASTQ_TRIM_DIR}" \
         --bind /tmp:/tmp \
         "${CONTAINER_DIR}/fastp.sif" \
         fastp \
-        -i "${PRIMARY_SEQ_DIR}/${sample}_1.fastq.gz" \
-        -I "${PRIMARY_SEQ_DIR}/${sample}_2.fastq.gz" \
+        -i "${INPUT_DIR}/${sample}_1.fastq.gz" \
+        -I "${INPUT_DIR}/${sample}_2.fastq.gz" \
         -o "${FASTQ_TRIM_DIR}/${sample}/${sample}_trimmed_R1.fastq.gz" \
         -O "${FASTQ_TRIM_DIR}/${sample}/${sample}_trimmed_R2.fastq.gz" \
         --detect_adapter_for_pe \
@@ -56,7 +56,7 @@ preprocess() {
 export -f preprocess
 
 # Get unique sample names from fastq files
-samples=$(find "${PRIMARY_SEQ_DIR}" -name "*.fastq.gz" |
+samples=$(find "${INPUT_DIR}" -name "*.fastq.gz" |
     sed 's/_[12]\.fastq\.gz$//' |
     sort -u |
     xargs -n1 basename)

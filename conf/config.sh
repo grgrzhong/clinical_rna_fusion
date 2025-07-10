@@ -8,8 +8,8 @@
 #############################################################################
 
 # Activate conda environment
-# source $(conda info --base)/etc/profile.d/conda.sh
-# conda activate rnafusion
+source $(conda info --base)/etc/profile.d/conda.sh
+conda activate rnafusion
 
 # Exit on any error
 set -e
@@ -19,33 +19,51 @@ set -e
 # "=========================================================================="
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export PROJECT_DIR
+
+# "=========================================================================="
+# Setup containers
+# "=========================================================================="
 export CONTAINER_DIR="${PROJECT_DIR}/containers"
+
+# Setup containers if not already done
+if [ ! -d "$CONTAINER_DIR" ]; then
+    echo "Container directory not found. Setting up containers..."
+    mkdir -p "$CONTAINER_DIR"
+    bash "${PROJECT_DIR}/conf/containers.sh"
+    echo "✓ Container setup completed"
+else
+    echo "Container directory already exists: $CONTAINER_DIR"
+    echo "Skipping container setup step."
+fi
+
+# Module directory containing scripts for processing data
 export MODULE_DIR="${PROJECT_DIR}/scripts/modules"
 
 # "=========================================================================="
 # Input and output directories
 # "=========================================================================="
-# Use command line argument for PRIMARY_SEQ_DIR, or default
-export PRIMARY_SEQ_DIR="${1:-${PROJECT_DIR}/data/Raw}"
-export RESULTS_DIR="${2:-${PROJECT_DIR}/data}"
-export FASTQ_TRIM_DIR="${RESULTS_DIR}/Input-trimmed"
-export FASTQC_TRIM_DIR="${RESULTS_DIR}/FastQC-trimmed"
-export ARRIBA_DIR="${RESULTS_DIR}/Output"
-export STAR_FUSION_DIR="${RESULTS_DIR}/Output"
-export REPORTS_DIR="${RESULTS_DIR}/Reports"
-export FEATURE_COUNTS_DIR="${RESULTS_DIR}/Feature-counts"
-
-# Create directories if they don't exist
-mkdir -p "$RESULTS_DIR" "$FASTQ_TRIM_DIR" "$FASTQC_TRIM_DIR" 
-mkdir -p "$ARRIBA_DIR" "$STAR_FUSION_DIR" "$REPORTS_DIR" "$FEATURE_COUNTS_DIR"
+# Use command line argument for INPUT_DIR, or default
+export INPUT_DIR="${1:-${PROJECT_DIR}/data/Raw}"
+export OUTPUT_DIR="${2:-${PROJECT_DIR}/data}"
 
 # Number of jobs to run in parallel, must be less than the number of samples
 # Default to 1 if not provided
-export PARALLEL_JOBS="${3:-8}"
+export PARALLEL_JOBS="${3:-1}"
 
 # Specific for STAR align jobs, 1 jobs take 16 threads
 export STAR_JOBS="${4:-1}"
 export STAR_THREADS=16
+
+export FASTQ_TRIM_DIR="${OUTPUT_DIR}/Input-trimmed"
+export FASTQC_TRIM_DIR="${OUTPUT_DIR}/FastQC-trimmed"
+export ARRIBA_DIR="${OUTPUT_DIR}/Output"
+export STAR_FUSION_DIR="${OUTPUT_DIR}/Output"
+export REPORTS_DIR="${OUTPUT_DIR}/Reports"
+export FEATURE_COUNTS_DIR="${OUTPUT_DIR}/Feature-counts"
+
+# Create directories if they don't exist
+mkdir -p "$OUTPUT_DIR" "$FASTQ_TRIM_DIR" "$FASTQC_TRIM_DIR" 
+mkdir -p "$ARRIBA_DIR" "$STAR_FUSION_DIR" "$REPORTS_DIR" "$FEATURE_COUNTS_DIR"
 
 # "=========================================================================="
 # Reference and annotation directories
@@ -75,12 +93,13 @@ export CYTOBANDS="${REFERENCE_DIR}/arriba_v2.4.0/database/cytobands_hg38_GRCh38_
 
 # Print out the environment information
 echo "========================================================================"
-echo "Clinical RNA Fusion Analysis Workflow"
+echo "Clinical RNA Fusion Analysis Workflow - Configuration"
+echo "========================================================================"
 echo "Project Directory:            $PROJECT_DIR"
 echo "Container Directory:          $CONTAINER_DIR"
 echo "Module Directory:             $MODULE_DIR"
-echo "Primary Seq Directory:        $PRIMARY_SEQ_DIR"
-echo "Results Directory:            $RESULTS_DIR"
+echo "Primary Seq Directory:        $INPUT_DIR"
+echo "Results Directory:            $OUTPUT_DIR"
 echo "FastQ Trim Directory:         $FASTQ_TRIM_DIR"
 echo "FastQC Trim Directory:        $FASTQC_TRIM_DIR"
 echo "Arriba Output Directory:      $ARRIBA_DIR"
@@ -102,4 +121,4 @@ echo "Cytobands:                    $CYTOBANDS"
 echo "STAR align parallel jobs:     $STAR_JOBS (Default: 1)"
 echo "STAR align job threads:       $STAR_THREADS (Default: 16)"
 echo "Other steps parallel jobs:    $PARALLEL_JOBS (Default: 8)"
-echo "======================================================================="
+
