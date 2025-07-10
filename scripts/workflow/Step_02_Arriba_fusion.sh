@@ -32,7 +32,7 @@ arriba_fusion(){
         --bind /tmp:/tmp \
         "${CONTAINER_DIR}/star-fusion.sif" \
         STAR \
-        --runThreadN "${THREADS}" \
+        --runThreadN "${STAR_THREADS}" \
         --genomeDir "${STAR_INDEX}" \
         --readFilesIn "${file1}" "${file2}" \
         --readFilesCommand "gunzip -c" \
@@ -118,6 +118,6 @@ samples=$(find "${FASTQ_TRIM_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n
 
 echo "$samples" |
     parallel \
-        --jobs "$JOBS" \
+        --jobs "${STAR_JOBS}" \
         --progress \
         arriba_fusion {}

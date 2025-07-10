@@ -30,7 +30,7 @@ star_fusion() {
         STAR --genomeDir "${STAR_INDEX}" \
         --readFilesIn "$file1" "$file2" \
         --outReadsUnmapped None \
-        --runThreadN "${THREADS}" \
+        --runThreadN "${STAR_THREADS}" \
         --twopassMode Basic \
         --readFilesCommand "gunzip -c" \
         --outSAMstrandField intronMotif \
@@ -96,6 +96,6 @@ samples=$(find "${FASTQ_TRIM_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n
 
 echo "$samples" |
     parallel \
-        --jobs "$JOBS" \
+        --jobs "$STAR_JOBS" \
         --progress \
         star_fusion {}

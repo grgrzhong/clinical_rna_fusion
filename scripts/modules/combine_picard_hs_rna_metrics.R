@@ -5,12 +5,14 @@
 # Usage: Rscript extract_multiqc_metrics.R <multiqc_data_dir> <output_csv> [sample_name]
 ################################################################################
 
-# Load required libraries
-suppressPackageStartupMessages({
-    library(optparse)
-    library(tidyverse)
 
-})
+# Load required libraries
+suppressPackageStartupMessages(
+    suppressWarnings({
+        library(optparse)
+        library(tidyverse)
+    })
+)
 
 # Define command line options
 option_list <- list(
@@ -75,7 +77,6 @@ required_columns <- c(
 )
 
 # Read HsMetrics data
-cat("Reading HsMetrics data from:", opt$hs_metrics, "\n")
 hs_metrics_data <- read.table(
     opt$hs_metrics, 
     header = TRUE, 
@@ -90,7 +91,6 @@ hs_metrics_in <- hs_metrics_cols[hs_metrics_cols %in% required_columns]
 hs_metrics_tbl <- hs_metrics_data[, hs_metrics_in, drop = FALSE]
 
 # Read RnaSeqMetrics data
-cat("Reading RnaSeqMetrics data from:", opt$rna_metrics, "\n")
 rna_metrics_data <- read.table(
     opt$rna_metrics, 
     header = TRUE, 

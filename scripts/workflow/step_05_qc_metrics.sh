@@ -99,6 +99,6 @@ export -f generate_qc_metrics
 samples=$(find "${STAR_FUSION_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
 echo "$samples" |
     parallel \
-        --jobs "$JOBS" \
+        --jobs "$PARALLEL_JOBS" \
         --progress \
         generate_qc_metrics {}
