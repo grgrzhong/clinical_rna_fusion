@@ -1,4 +1,4 @@
-## Install tools
+## Install software
 ```bash
 ## Install conda
 wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh"
@@ -18,6 +18,10 @@ conda config --set auto_activate_base false
 
 ## Create environment with required tools
 conda create -n rnafusion apptainer parallel
+
+## Install apptainer required software
+sudo apt install gocryptfs -y
+sudo apt install fuse2fs -y
 
 ```
 
