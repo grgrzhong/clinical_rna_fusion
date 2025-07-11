@@ -43,6 +43,9 @@ conda config --set auto_activate_base false
 ```bash
 # Create environment with required tools
 conda create -n rnafusion apptainer parallel
+
+# Or create the environment from the file
+conda env create -f ./conf/rnafusion.yml
 ```
 
 ### Step 4: Install System Dependencies (Optional)
@@ -53,7 +56,7 @@ sudo apt update
 sudo apt install gocryptfs fuse2fs -y
 ```
 
-### Step 5: Download the Pipeline
+### Step 5: Download and Setup the Pipeline
 
 ```bash
 # Clone the repository
@@ -78,22 +81,22 @@ The pipeline consists of 5 main steps that are executed sequentially:
 
 ## Usage
 
-### Basic Command Structure
+### Configuration Parameters
 
-```bash
-./rnafusion_pipeline.sh <input_dir> <output_dir> <parallel_jobs> <star_jobs>
-```
+Edit `conf/config.sh` to set the following parameters:
 
-### Parameters
+- **`INPUT_DIR`**: Absolute path to directory containing raw FASTQ files (default: `${PROJECT_DIR}/data/Raw`)
+- **`OUTPUT_DIR`**: Absolute path to directory for output files (default: `${PROJECT_DIR}/data`)
+- **`PARALLEL_JOBS`**: Number of samples to process in parallel (default: 1)
+- **`STAR_JOBS`**: Number of parallel STAR alignment jobs (each uses 16 threads, default: 1)
+- **`REFERENCE_DIR`**: Path to reference files directory (default: `/mnt/f/Reference`)
+- **`CONTAINER_DIR`**: Path to container files directory (default: `${PROJECT_DIR}/containers`)
 
-- **`input_dir`**: Absolute path to directory containing raw FASTQ files
-- **`output_dir`**: Absolute path to directory for output files
-- **`parallel_jobs`**: Number of samples to process in parallel
-- **`star_jobs`**: Number of parallel STAR alignment jobs (each uses 16 threads)
+> **Important**: Ensure `STAR_JOBS × 16 ≤ total_CPU_cores` to avoid system overload.
 
-> **Important**: Ensure `star_jobs × 16 ≤ total_CPU_cores` to avoid system overload.
+### example
 
-### Example Commands
+You can also pass parameters directly as command line arguments to the config:
 
 ```bash
 # Basic example with single sample processing
@@ -106,7 +109,10 @@ The pipeline consists of 5 main steps that are executed sequentially:
 ./rnafusion_pipeline.sh \
   /path/to/fastq/files \
   /path/to/output \
-  8 2
+  8 \
+  2 \
+  /path/to/reference \
+  /path/to/containers
 ```
 
 ## Input Requirements
