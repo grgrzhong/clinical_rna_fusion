@@ -30,13 +30,13 @@ echo "Clinical RNA Fusion Analysis Workflow - Container Setup"
 echo "======================================================================="
 # Setup containers if not already done
 if [ ! -d "$CONTAINER_DIR" ]; then
-    echo "Container directory not found. Setting up containers..."
+    echo "$(date +"%F") $(date +"%T") Container directory not found. Setting up containers..."
     mkdir -p "$CONTAINER_DIR"
     bash "${PROJECT_DIR}/conf/containers.sh"
-    echo "✓ Container setup completed"
+    echo "$(date +"%F") $(date +"%T") ✓ Container setup completed"
 else
-    echo "Container directory already exists: $CONTAINER_DIR"
-    echo "Skipping container setup step."
+    echo "$(date +"%F") $(date +"%T") Container directory already exists: $CONTAINER_DIR"
+    echo "$(date +"%F") $(date +"%T") Skipping container setup step."
 fi
 
 # Module directory containing scripts for processing data

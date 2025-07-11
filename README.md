@@ -9,7 +9,7 @@ if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
     . $HOME/miniconda3/etc/profile.d/conda.sh
 fi
 
-## General config
+## General conda config
 conda update -y -n base -c defaults conda
 conda config --set solver libmamba
 conda config --add channels conda-forge
@@ -37,6 +37,7 @@ Arguments to run the rnafusion pipeline:
 - parallel_jobs: number of jobs in parallel procesing samples
 - star_jobs: number of jobs in parallel parallel procesing samples for running STAR alignment, each job takes 16 threads (default)
 
+Make sure the star_jobs*16 < the number of  processes in your computer
 
 ```bash
 # Step1: Download the pipeline 
