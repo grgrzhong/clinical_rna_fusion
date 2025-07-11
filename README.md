@@ -2,16 +2,6 @@
 
 This pipeline performs RNA fusion detection using multiple tools including Arriba and STAR-Fusion. It processes paired-end RNA-seq FASTQ files through quality control, alignment, fusion detection, and generates comprehensive reports.
 
-## Table of Contents
-- [Overview](#overview)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Pipeline Steps](#pipeline-steps)
-- [Usage](#usage)
-- [Input Requirements](#input-requirements)
-- [Output Structure](#output-structure)
-- [Troubleshooting](#troubleshooting)
-
 ## Overview
 
 The Clinical RNA Fusion Analysis Pipeline includes the following main steps:
@@ -146,20 +136,14 @@ The pipeline generates the following output structure:
 
 ```
 output_dir/
-├── Input-trimmed/        # Trimmed FASTQ files
-├── FastQC-trimmed/       # Trimmed FASTQ quality reports
-├── Output/               # Main analysis results
-    ├── {sample}/
-    │   ├── arriba/       # Arriba fusion results
-    │   ├── star-fusion/  # STAR-Fusion results
-    │   ├── alignment/    # BAM files and indices
-    │   └── qc/          # Quality control metrics
-
+├── Input-trimmed/                              # Trimmed FASTQ files
+├── FastQC-trimmed/                             # Trimmed FASTQ quality reports
+├── Output/                                     # Main analysis results
+    ├── {sample}/         
+    │   ├── Aligned.sortedByCoord.out.bam       # Final bam file
+    │   ├── fusions.tsv                         # Arriba fusion results
+    │   ├── star-fusion.fusion_predictions.tsv  # STAR fusion results
+    │   ├── {sample}_RnaSeqMetrics.csv          # Quality control metrics
+    │   └── fusion_report/                      # combined Arriba and STAR fusion results
+    
 ```
-
-### Key Output Files
-
-- **Fusion Results**: `Output/{sample}/fusions.tsv` and `Output/{sample}/star-fusion.fusion_predictions.tsv`
-- **QC Report**: `Output/{sample}/{sample}_RnaSeqMetrics.csv`
-- **Fusion Summary**: `Reports/fusion_report.html`
-- **Alignment Files**: `Output/{sample}/alignment/Aligned.sortedByCoord.out.bam`

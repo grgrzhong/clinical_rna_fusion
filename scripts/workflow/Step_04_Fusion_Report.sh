@@ -34,6 +34,16 @@ fusion_report() {
         --no-cosmic \
         --allow-multiple-gene-symbols \
         >&"${output_dir}/fusion_report.log"
+    
+    # Convert the json report to summary in xlsx
+    echo "$(date +"%F") $(date +"%T") - Converting JSON report to XLSX ..."
+    singularity exec \
+        --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
+        --bind /tmp:/tmp \
+        "${CONTAINER_DIR}/r.sif" \
+        Rscript "${MODULE_DIR}/convert_fusion_report_json_to_xlsx.R" \
+        --input_json "${output_dir}/fusions.json" \
+        --output_xlsx "${output_dir}/${sample}_fusion_summary.xlsx"
 }
 
 # Export the function for parallel execution
