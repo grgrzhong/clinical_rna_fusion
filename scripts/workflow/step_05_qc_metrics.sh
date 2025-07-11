@@ -20,7 +20,7 @@ generate_qc_metrics() {
     fi
     
     # CollectHsMetrics information
-    echo "$(date +"%F") $(date +"%T") - Running CollectHsMetrics for sample = ${sample}"
+    echo "$(date +"%F") $(date +"%T") - Running CollectHsMetrics ..."
     
     hs_metrics_file="${STAR_FUSION_DIR}/${sample}/${sample}_hs_metrics.txt"
 
@@ -39,7 +39,7 @@ generate_qc_metrics() {
         >& "${STAR_FUSION_DIR}/${sample}/${sample}_hs_metrics.log"
 
     # CollectRnaSeqMetrics information
-    echo "$(date +"%F") $(date +"%T") - Running CollectRnaSeqMetrics for sample = ${sample}"
+    echo "$(date +"%F") $(date +"%T") - Running CollectRnaSeqMetrics ..."
 
     rna_metrics_file="${STAR_FUSION_DIR}/${sample}/${sample}_rna_metrics.txt"
 
@@ -58,7 +58,7 @@ generate_qc_metrics() {
         >& "${STAR_FUSION_DIR}/${sample}/${sample}_rna_metrics.log"
 
     ## Generate MultiQC report for 
-    echo "$(date +"%F") $(date +"%T") - Generating MultiQC report for sample = ${sample}"
+    echo "$(date +"%F") $(date +"%T") - Generating MultiQC report ..."
     
     multiqc_dir="${STAR_FUSION_DIR}/${sample}/multiqc"
 
@@ -80,7 +80,7 @@ generate_qc_metrics() {
         >& "${multiqc_dir}/${sample}_multiqc.log"
     
     ## Export the metrics to CSV
-    echo "$(date +"%F") $(date +"%T") - Exporting metrics to CSV for sample = ${sample}"
+    echo "$(date +"%F") $(date +"%T") - Exporting metrics to CSV ..."
 
     singularity exec \
         --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \

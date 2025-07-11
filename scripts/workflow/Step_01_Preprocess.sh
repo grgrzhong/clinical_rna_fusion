@@ -13,7 +13,6 @@ preprocess() {
     local sample="$1"
 
     echo "$(date +"%F") $(date +"%T")" " - Processing sample = ${sample}"
-
     ## Create output directories
     mkdir -p "${FASTQ_TRIM_DIR}/${sample}"
     mkdir -p "${FASTQC_TRIM_DIR}/${sample}"
@@ -42,7 +41,7 @@ preprocess() {
         2>"${FASTQ_TRIM_DIR}/${sample}/${sample}.fastp.log"
 
     ## FastQC on trimmed fastq files
-    echo "$(date +"%F") $(date +"%T")" " - Running FastQC on trimmed fastq files for sample ${sample}"
+    echo "$(date +"%F") $(date +"%T")" " - Running FastQC on trimmed fastq files ..."
     singularity exec \
         --bind "${PROJECT_DIR}":"${PROJECT_DIR}" \
         --bind "${FASTQ_TRIM_DIR}":"${FASTQ_TRIM_DIR}" \
@@ -56,8 +55,6 @@ preprocess() {
         --memory 4096 \
         -t 4 \
         >& "${FASTQC_TRIM_DIR}/${sample}/${sample}.fastqc.log"
-
-    echo "$(date +"%F") $(date +"%T")" " - Completed preprocessing sample = ${sample}"
 }
 
 ## Export the function so parallel can use it

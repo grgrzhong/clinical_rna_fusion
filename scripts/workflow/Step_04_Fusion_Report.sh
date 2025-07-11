@@ -21,7 +21,7 @@ fusion_report() {
     mkdir -p "$output_dir"
 
     # Run fusion_report for the sample
-    echo "$(date +"%F") $(date +"%T") - Running fusion_report for sample = ${sample}"
+    echo "$(date +"%F") $(date +"%T") - Running fusion_report ..."
 
     singularity exec \
         --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \

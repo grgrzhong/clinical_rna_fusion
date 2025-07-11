@@ -13,7 +13,6 @@ arriba_fusion(){
     local sample="$1"
 
     echo "$(date +"%F") $(date +"%T")" "- Processing sample = ${sample}"
-
     ## Create output directory for STAR-Fusion results
     output_dir=${ARRIBA_DIR}/${sample}/
     mkdir -p "$output_dir"
