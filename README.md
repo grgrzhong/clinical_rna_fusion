@@ -19,13 +19,16 @@ conda config --set auto_activate_base false
 ## Create environment with required tools
 conda create -n rnafusion apptainer parallel
 
-## Install apptainer required software
-sudo apt install gocryptfs -y
-sudo apt install fuse2fs -y
+## Install apptainer dependency (optional)
+sudo apt install gocryptfs fuse2fs -y
 
 ```
 
 ## Runing pipeline
+
+```bash
+rnafusion_pipeline.sh <input_dir> <output_dir> <parallel_jobs> <star_jobs>
+```
 
 Arguments to run the rnafusion pipeline:
 
@@ -34,6 +37,16 @@ Arguments to run the rnafusion pipeline:
 - parallel_jobs: number of jobs in parallel procesing samples
 - star_jobs: number of jobs in parallel parallel procesing samples for running STAR alignment, each job takes 16 threads (default)
 
+
 ```bash
-rnafusion_pipeline <input_dir> <output_dir> <parallel_jobs> <star_jobs>
+# Step1: Download the pipeline 
+git clone https://github.com/grgrzhong/clinical_rna_fusion.git
+cd  clinical_rna_fusion
+
+# Run the pipeline, it will automatically setup the environment
+# Step2: Run the pipeline by provide the input_dir and output_dir 
+rnafusion_pipeline.sh <input_dir> <output_dir> <parallel_jobs> <star_jobs>
+
+# example
+rnafusion_pipeline.sh /mnt/f/projects/clinical_rna_fusion/test/Raw /mnt/f/projects/clinical_rna_fusion/test 1 1
 ```

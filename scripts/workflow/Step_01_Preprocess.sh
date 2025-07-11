@@ -65,5 +65,4 @@ samples=$(find "${INPUT_DIR}" -name "*.fastq.gz" |
 echo "$samples" |
     parallel \
         --jobs "$PARALLEL_JOBS" \
-        --progress \
         preprocess {}

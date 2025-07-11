@@ -45,5 +45,4 @@ samples=$(find "${STAR_FUSION_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\
 echo "$samples" |
     parallel \
         --jobs "$PARALLEL_JOBS" \
-        --progress \
         fusion_report {}

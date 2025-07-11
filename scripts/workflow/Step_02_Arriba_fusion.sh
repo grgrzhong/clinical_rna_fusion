@@ -119,5 +119,4 @@ samples=$(find "${FASTQ_TRIM_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n
 echo "$samples" |
     parallel \
         --jobs "${STAR_JOBS}" \
-        --progress \
         arriba_fusion {}
