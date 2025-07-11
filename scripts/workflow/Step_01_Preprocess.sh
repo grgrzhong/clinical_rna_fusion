@@ -47,7 +47,7 @@ preprocess() {
         -o "${FASTQC_TRIM_DIR}/${sample}" \
         --memory 4096 \
         -t 4 \
-        >& "${FASTQC_TRIM_DIR}/${sample}.fastqc.log"
+        >& "${FASTQC_TRIM_DIR}/${sample}/${sample}.fastqc.log"
 
     echo "$(date +"%F") $(date +"%T")" " - Completed preprocessing sample = ${sample}"
 }
