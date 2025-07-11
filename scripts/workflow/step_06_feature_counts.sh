@@ -1,5 +1,13 @@
 #!/bin/bash
 
+#############################################################################
+# Clinical RNA Fusion Analysis Workflow - Feature Counts Step
+# This script generates an expression matrix using featureCounts from STAR-Fusion BAM files.
+#############################################################################
+
+## Create the output directory if it does not exist
+mkdir -p "${FEATURE_COUNTS_DIR}"
+
 ## Funtion to generate the expression matrix
 clean_remove_duplicates() {
     local sample="$1"

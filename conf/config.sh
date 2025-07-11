@@ -25,6 +25,9 @@ export PROJECT_DIR
 # "=========================================================================="
 export CONTAINER_DIR="${PROJECT_DIR}/containers"
 
+echo "======================================================================="
+echo "Clinical RNA Fusion Analysis Workflow - Container Setup"
+echo "======================================================================="
 # Setup containers if not already done
 if [ ! -d "$CONTAINER_DIR" ]; then
     echo "Container directory not found. Setting up containers..."
@@ -46,6 +49,9 @@ export MODULE_DIR="${PROJECT_DIR}/scripts/modules"
 export INPUT_DIR="${1:-${PROJECT_DIR}/data/Raw}"
 export OUTPUT_DIR="${2:-${PROJECT_DIR}/data}"
 
+# Create output directory if it does not exist
+mkdir -p "$OUTPUT_DIR" 
+
 # Number of jobs to run in parallel, must be less than the number of samples
 # Default to 1 if not provided
 export PARALLEL_JOBS="${3:-1}"
@@ -58,17 +64,14 @@ export FASTQ_TRIM_DIR="${OUTPUT_DIR}/Input-trimmed"
 export FASTQC_TRIM_DIR="${OUTPUT_DIR}/FastQC-trimmed"
 export ARRIBA_DIR="${OUTPUT_DIR}/Output"
 export STAR_FUSION_DIR="${OUTPUT_DIR}/Output"
+
 export REPORTS_DIR="${OUTPUT_DIR}/Reports"
 export FEATURE_COUNTS_DIR="${OUTPUT_DIR}/Feature-counts"
-
-# Create directories if they don't exist
-mkdir -p "$OUTPUT_DIR" "$FASTQ_TRIM_DIR" "$FASTQC_TRIM_DIR" 
-mkdir -p "$ARRIBA_DIR" "$STAR_FUSION_DIR" "$REPORTS_DIR" "$FEATURE_COUNTS_DIR"
 
 # "=========================================================================="
 # Reference and annotation directories
 # "=========================================================================="
-export REFERENCE_DIR="/mnt/f/projects/Reference"
+export REFERENCE_DIR="/mnt/f/Reference"
 # export STAR_INDEX="${REFERENCE_DIR}/Gencode/STAR_index"
 export STAR_INDEX="${REFERENCE_DIR}/Gencode/STAR_index_hg38.v44"
 
@@ -120,5 +123,5 @@ echo "Protein Domains:              $PROTEIN_DOMAINS"
 echo "Cytobands:                    $CYTOBANDS"
 echo "STAR align parallel jobs:     $STAR_JOBS (Default: 1)"
 echo "STAR align job threads:       $STAR_THREADS (Default: 16)"
-echo "Other steps parallel jobs:    $PARALLEL_JOBS (Default: 8)"
+echo "Other steps parallel jobs:    $PARALLEL_JOBS (Default: 1)"
 

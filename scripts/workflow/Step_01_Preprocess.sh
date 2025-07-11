@@ -1,6 +1,14 @@
 #!/bin/bash
 
-## Function to process a single sample
+#############################################################################
+# Clinical RNA Fusion Analysis Workflow - Preprocessing Step
+# This script preprocesses RNA-Seq data by trimming fastq files and running FastQC.
+#############################################################################
+
+# Create the output directories if they do not exist
+mkdir -p "${FASTQ_TRIM_DIR}" "${FASTQC_TRIM_DIR}"
+
+# Function to process a single sample
 preprocess() {
     local sample="$1"
 

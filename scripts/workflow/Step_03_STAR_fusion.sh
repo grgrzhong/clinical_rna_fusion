@@ -1,7 +1,14 @@
 #!/bin/bash
 
+#############################################################################
+# Clinical RNA Fusion Analysis Workflow - STAR-Fusion Step
+# This script processes RNA-Seq data using STAR-Fusion for fusion detection.
+#############################################################################
 
-## Loop through all fastq.gz files in the trimmed fastq directory
+# Create the output directory if it does not exist
+mkdir -p "${STAR_FUSION_DIR}"
+
+# Function to run STAR-Fusion for fusion detection 
 star_fusion() {
     local sample="$1"
 

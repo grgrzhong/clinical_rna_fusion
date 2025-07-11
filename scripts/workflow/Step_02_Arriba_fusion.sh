@@ -5,6 +5,9 @@
 # This script processes RNA-Seq data using Arriba for fusion detection.
 #############################################################################
 
+# Create the output directory if it does not exist
+mkdir -p "${ARRIBA_DIR}"
+
 # Loop through all fastq.gz files in the trimmed fastq directory
 arriba_fusion(){
     local sample="$1"
