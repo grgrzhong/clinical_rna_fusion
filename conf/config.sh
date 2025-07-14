@@ -91,8 +91,6 @@ else
     echo "$(date +"%F") $(date +"%T") Skipping container setup step."
 fi
 
-
-
 # Print out the environment information
 echo "========================================================================"
 echo "Clinical RNA Fusion Analysis Workflow - Configuration"
