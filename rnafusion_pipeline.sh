@@ -61,7 +61,7 @@ if [ $? -ne 0 ]; then
     echo "✗ Error: Fusion report generation failed. Exiting pipeline."
     exit 1
 fi
-echo "$(date +"%F") $(date +"%T")✓ Fusion report steps completed"
+echo "$(date +"%F") $(date +"%T") ✓ Fusion report steps completed"
 
 # Step 5: QC metrics for HS and RnaSeq
 echo "$(date +"%F") $(date +"%T") Step 5: Generating QC metrics..."

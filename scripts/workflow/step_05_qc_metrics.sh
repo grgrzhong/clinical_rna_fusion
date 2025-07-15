@@ -7,6 +7,7 @@
 
 ## Collect HS metrics for each sample in STAR_FUSION_DIR
 generate_qc_metrics() {
+    
     local sample="$1"
 
     echo "$(date +"%F") $(date +"%T") - Processing sample = ${sample}"
@@ -98,6 +99,7 @@ export -f generate_qc_metrics
 
 # Process samples in parallel
 samples=$(find "${STAR_FUSION_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+
 echo "$samples" |
     parallel \
         --jobs "$PARALLEL_JOBS" \
