@@ -59,8 +59,6 @@ if (length(data_flatten) == 0) {
     
     write_xlsx(data.frame(), opt$output_xlsx)
     
-    message("No data found in the input JSON file, creating an empty xlsx file ...")
-
 } else {
 
     # Fill in missing position fields
