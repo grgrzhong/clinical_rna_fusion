@@ -18,6 +18,7 @@ preprocess() {
     mkdir -p "${FASTQC_TRIM_DIR}/${sample}"
 
     ## Trim the fastq files using fastp
+    echo "$(date +"%F") $(date +"%T")" " - Running fastp for trimming ..."
     singularity exec \
         --bind "${PROJECT_DIR}":"${PROJECT_DIR}" \
         --bind "${INPUT_DIR}":"${INPUT_DIR}" \

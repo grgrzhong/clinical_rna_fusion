@@ -51,14 +51,6 @@ if (!file.exists(opt$input_json)) {
     stop(paste("Input JSON file not found:", opt$input_json), call. = FALSE)
 }
 
-# Find all fusions.json files
-json_files <- list.files(
-    opt$input_json, 
-    pattern = "fusions.json", 
-    recursive = TRUE, 
-    full.names = TRUE
-)
-
 # Load data
 data_flatten <- fromJSON(opt$input_json, flatten = TRUE)
     
