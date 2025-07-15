@@ -33,7 +33,7 @@ fusion_report() {
         --starfusion "${star_fusion_file}" \
         --no-cosmic \
         --allow-multiple-gene-symbols \
-        >&"${output_dir}/fusion_report.log"
+        >& "${output_dir}/fusion_report.log"
     
     # Convert the json report to summary in xlsx
     echo "$(date +"%F") $(date +"%T") - Converting JSON report to XLSX ..."
