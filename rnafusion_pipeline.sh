@@ -24,7 +24,7 @@ set -o pipefail  # Exit if any command in pipeline fails
 start_time=$(date +"%F %T")
 
 echo "======================================================================="
-echo "Clinical RNA Fusion Analysis Workflow - Pipeline Execution"
+echo "Clinical RNA Fusion Analysis Workflow - Pipeline"
 echo "======================================================================="
 
 # Step 1: Preprocessing

@@ -76,7 +76,7 @@ export PROTEIN_DOMAINS="${REFERENCE_DIR}/arriba_v2.4.0/database/protein_domains_
 export CYTOBANDS="${REFERENCE_DIR}/arriba_v2.4.0/database/cytobands_hg38_GRCh38_v2.4.0.tsv"
 
 echo "======================================================================="
-echo "Clinical RNA Fusion Analysis Workflow - Container Setup"
+echo "Clinical RNA Fusion Analysis Workflow - Containers"
 echo "======================================================================="
 export CONTAINER_DIR="${6:-${PROJECT_DIR}}/containers"
 
@@ -93,7 +93,7 @@ fi
 
 # Print out the environment information
 echo "========================================================================"
-echo "Clinical RNA Fusion Analysis Workflow - Configuration"
+echo "Clinical RNA Fusion Analysis Workflow - Configurations"
 echo "========================================================================"
 echo "Project Directory:            $PROJECT_DIR"
 echo "Container Directory:          $CONTAINER_DIR"

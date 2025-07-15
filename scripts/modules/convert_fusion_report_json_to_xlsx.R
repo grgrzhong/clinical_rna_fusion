@@ -53,57 +53,67 @@ if (!file.exists(opt$input_json)) {
 
 # Load data
 data_flatten <- fromJSON(opt$input_json, flatten = TRUE)
+
+# If data_flattent is empty, then save an empty xlsx file
+if (length(data_flatten) == 0) {
     
-# Fill in missing position fields
-if (!"starfusion.position" %in% names(data_flatten)) data_flatten$starfusion.position <- NA
-if (!"arriba.position" %in% names(data_flatten)) data_flatten$arriba.position <- NA
+    write_xlsx(data.frame(), opt$output_xlsx)
+    
+    message("No data found in the input JSON file, creating an empty xlsx file ...")
 
-# Clean position strings for comparison
-fusion_summary <- data_flatten |>
-    rowwise() |>
-    mutate(
-        cleaned_starfusion = gsub(":-|:\\+", "", starfusion.position),
-        cleaned_starfusion = gsub("-#", "#", cleaned_starfusion),
-        position_match = (!is.na(starfusion.position) & !is.na(arriba.position)) &&
-            cleaned_starfusion == arriba.position,
-        Number_of_callers = case_when(
-            position_match ~ 2,
-            !is.na(starfusion.position) & is.na(arriba.position) ~ 1,
-            is.na(starfusion.position) & !is.na(arriba.position) ~ 1,
-            TRUE ~ 0
-        ),
-        Caller_names = paste(
-            c(
-                if (!is.na(starfusion.position)) "STAR-fusion",
-                if (!is.na(arriba.position)) "Arriba"
+} else {
+
+    # Fill in missing position fields
+    if (!"starfusion.position" %in% names(data_flatten)) data_flatten$starfusion.position <- NA
+    if (!"arriba.position" %in% names(data_flatten)) data_flatten$arriba.position <- NA
+
+    # Clean position strings for comparison
+    fusion_summary <- data_flatten |>
+        rowwise() |>
+        mutate(
+            cleaned_starfusion = gsub(":-|:\\+", "", starfusion.position),
+            cleaned_starfusion = gsub("-#", "#", cleaned_starfusion),
+            position_match = (!is.na(starfusion.position) & !is.na(arriba.position)) &&
+                cleaned_starfusion == arriba.position,
+            Number_of_callers = case_when(
+                position_match ~ 2,
+                !is.na(starfusion.position) & is.na(arriba.position) ~ 1,
+                is.na(starfusion.position) & !is.na(arriba.position) ~ 1,
+                TRUE ~ 0
             ),
-            collapse = ", "
-        )
-    ) |>
-    ungroup() |>
-    relocate(Number_of_callers, Caller_names, .after = Fusion)
+            Caller_names = paste(
+                c(
+                    if (!is.na(starfusion.position)) "STAR-fusion",
+                    if (!is.na(arriba.position)) "Arriba"
+                ),
+                collapse = ", "
+            )
+        ) |>
+        ungroup() |>
+        relocate(Number_of_callers, Caller_names, .after = Fusion)
 
-# Replace empty Databases
-if ("Databases" %in% names(fusion_summary)) {
+    # Replace empty Databases
     if ("Databases" %in% names(fusion_summary)) {
-        fusion_summary$Databases <- sapply(fusion_summary$Databases, function(x) {
-            if (is.null(x) || length(x) == 0 || identical(x, character(0))) {
-                "#N/A"
-            } else if (is.character(x)) {
-                paste(x, collapse = "; ")
-            } else {
-                as.character(x)
-            }
-        })
+        if ("Databases" %in% names(fusion_summary)) {
+            fusion_summary$Databases <- sapply(fusion_summary$Databases, function(x) {
+                if (is.null(x) || length(x) == 0 || identical(x, character(0))) {
+                    "#N/A"
+                } else if (is.character(x)) {
+                    paste(x, collapse = "; ")
+                } else {
+                    as.character(x)
+                }
+            })
+        }
     }
+
+    # Drop empty position columns
+    if (all(is.na(fusion_summary$starfusion.position))) fusion_summary$starfusion.position <- NULL
+    if (all(is.na(fusion_summary$arriba.position))) fusion_summary$arriba.position <- NULL
+
+    # Get sample name from folder
+    sample_id <- basename(dirname(dirname(opt$input_json)))
+
+    # Save individual fusion summary
+    write_xlsx(fusion_summary, opt$output_xlsx)
 }
-
-# Drop empty position columns
-if (all(is.na(fusion_summary$starfusion.position))) fusion_summary$starfusion.position <- NULL
-if (all(is.na(fusion_summary$arriba.position))) fusion_summary$arriba.position <- NULL
-
-# Get sample name from folder
-sample_id <- basename(dirname(dirname(opt$input_json)))
-
-# Save individual fusion summary
-write_xlsx(fusion_summary, opt$output_xlsx)
