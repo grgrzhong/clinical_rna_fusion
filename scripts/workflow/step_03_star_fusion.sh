@@ -12,8 +12,6 @@ mkdir -p "${STAR_FUSION_DIR}"
 star_fusion() {
     local sample="$1"
 
-    echo "$(date +"%F") $(date +"%T")" "Processing sample = ${sample}"
-
     ## Create output directory for STAR-Fusion results
     output_dir=${STAR_FUSION_DIR}/${sample}/
     mkdir -p "$output_dir"
@@ -23,8 +21,8 @@ star_fusion() {
     rm -rf "$tmp_dir"
 
     ## Run STAR alignment for STAR-Fusion
-    echo "$(date +"%F") $(date +"%T")" "- Running STAR alignment for STAR-Fusion ..."
-    
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Running STAR alignment for STAR-Fusion ..."
+
     file1="${FASTQ_TRIM_DIR}/${sample}/${sample}_trimmed_R1.fastq.gz"
     file2="${FASTQ_TRIM_DIR}/${sample}/${sample}_trimmed_R2.fastq.gz"
 
@@ -66,7 +64,7 @@ star_fusion() {
         >& "${output_dir}/star_star_align.log"
 
     # Run samtools with singularity exec
-    echo "$(date +"%F") $(date +"%T")" "- Indexing BAM file with samtools ..."
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Indexing BAM file with samtools ..."
 
     singularity exec \
         --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
@@ -76,7 +74,7 @@ star_fusion() {
         samtools index "${output_dir}/Aligned.sortedByCoord.out.bam"
 
     # Run STAR-Fusion with singularity exec
-    echo "$(date +"%F") $(date +"%T")" "- Running STAR Fusion ..."
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Running STAR Fusion ..."
 
     singularity exec \
         --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \

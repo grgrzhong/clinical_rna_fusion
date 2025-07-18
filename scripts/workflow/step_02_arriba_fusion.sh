@@ -12,7 +12,6 @@ mkdir -p "${ARRIBA_DIR}"
 arriba_fusion(){
     local sample="$1"
 
-    echo "$(date +"%F") $(date +"%T")" "- Processing sample = ${sample}"
     ## Create output directory for STAR-Fusion results
     output_dir=${ARRIBA_DIR}/${sample}/
     mkdir -p "$output_dir"
@@ -22,7 +21,7 @@ arriba_fusion(){
     rm -rf "$tmp_dir"
 
     ## Run STAR alignment for Arriba
-    echo "$(date +"%F") $(date +"%T")" "- Running STAR alignment for Arriba ..."
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Running STAR alignment for Arriba ..."
     
     file1="${FASTQ_TRIM_DIR}/${sample}/${sample}_trimmed_R1.fastq.gz"
     file2="${FASTQ_TRIM_DIR}/${sample}/${sample}_trimmed_R2.fastq.gz"
@@ -58,7 +57,7 @@ arriba_fusion(){
         >& "${output_dir}/arriba_star_align.log"
 
     ## Index the BAM file
-    echo "$(date +"%F") $(date +"%T")" "- Indexing BAM file with samtools ..."
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Indexing BAM file with samtools ..."
     rm -rf "${output_dir}/Aligned.sortedByCoord.out.bam.bai"
     
     singularity exec \
@@ -69,7 +68,7 @@ arriba_fusion(){
         samtools index "${output_dir}/Aligned.sortedByCoord.out.bam"
 
     ## Run Arriba for fusion detection
-    echo "$(date +"%F") $(date +"%T")" "- Running Arriba for fusion detection ..."
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Running Arriba for fusion detection ..."
     
     singularity exec \
         --bind "${REFERENCE_DIR}":"${REFERENCE_DIR}" \
@@ -89,7 +88,7 @@ arriba_fusion(){
         >& "${output_dir}/arriba_detect_fusion.log"
 
     ## Draw Arriba fusions
-    echo "$(date +"%F") $(date +"%T")" "- Drawing Arriba fusions ..."
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Drawing Arriba fusions ..."
     
     singularity exec \
         --bind "${REFERENCE_DIR}":"${REFERENCE_DIR}" \
@@ -107,7 +106,7 @@ arriba_fusion(){
         >& "${output_dir}/arriba_draw_fusions.log"
 
     ## Keep only files start with "fusions" and log files in the output directory
-    echo "$(date +"%F") $(date +"%T")" "- Keeping only relevant files in output directory for Arriba ..."
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Keeping only relevant files for Arriba ..."
     find "$output_dir" -type f ! -name "fusions*" ! -name "*.log" -exec rm -f {} \;
 
 }

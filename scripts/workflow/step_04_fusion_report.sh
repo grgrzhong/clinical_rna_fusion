@@ -10,8 +10,6 @@ fusion_report() {
 
     local sample="$1"
 
-    echo "$(date +"%F") $(date +"%T") - Processing sample = ${sample}"
-
     # Arriba and STAR fusion data
     arriba_fusion_file="$STAR_FUSION_DIR/$sample/fusions.tsv"
     star_fusion_file="$STAR_FUSION_DIR/$sample/star-fusion.fusion_predictions.tsv"
@@ -21,7 +19,7 @@ fusion_report() {
     mkdir -p "$output_dir"
 
     # Run fusion_report for the sample
-    echo "$(date +"%F") $(date +"%T") - Running fusion_report ..."
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Running fusion_report ..."
 
     singularity exec \
         --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
@@ -36,7 +34,7 @@ fusion_report() {
         >& "${output_dir}/fusion_report.log"
     
     # Convert the json report to summary in xlsx
-    echo "$(date +"%F") $(date +"%T") - Converting JSON report to XLSX ..."
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Converting JSON report to XLSX ..."
     singularity exec \
         --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
         --bind /tmp:/tmp \

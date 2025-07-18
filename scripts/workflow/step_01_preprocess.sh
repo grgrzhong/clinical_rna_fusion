@@ -12,13 +12,12 @@ mkdir -p "${FASTQ_TRIM_DIR}" "${FASTQC_TRIM_DIR}"
 preprocess() {
     local sample="$1"
 
-    echo "$(date +"%F") $(date +"%T")" " - Processing sample = ${sample}"
     ## Create output directories
     mkdir -p "${FASTQ_TRIM_DIR}/${sample}"
     mkdir -p "${FASTQC_TRIM_DIR}/${sample}"
 
     ## Trim the fastq files using fastp
-    echo "$(date +"%F") $(date +"%T")" " - Running fastp for trimming ..."
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Running fastp for trimming ..."
     singularity exec \
         --bind "${PROJECT_DIR}":"${PROJECT_DIR}" \
         --bind "${INPUT_DIR}":"${INPUT_DIR}" \
@@ -42,7 +41,7 @@ preprocess() {
         2>"${FASTQ_TRIM_DIR}/${sample}/${sample}.fastp.log"
 
     ## FastQC on trimmed fastq files
-    echo "$(date +"%F") $(date +"%T")" " - Running FastQC on trimmed fastq files ..."
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Running FastQC on trimmed fastq files ..."
     singularity exec \
         --bind "${PROJECT_DIR}":"${PROJECT_DIR}" \
         --bind "${FASTQ_TRIM_DIR}":"${FASTQ_TRIM_DIR}" \
