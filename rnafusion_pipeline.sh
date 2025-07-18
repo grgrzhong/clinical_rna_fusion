@@ -64,7 +64,7 @@ fi
 echo "$(date +"%F") $(date +"%T") Step 4: Generating fusion report (✓)"
 
 # Step 5: QC metrics for HS and RnaSeq
-echo "$(date +"%F") $(date +"%T") Step 5: Generating QC metrics..."
+echo "$(date +"%F") $(date +"%T") Step 5: Generating QC metrics ..."
 bash "${PROJECT_DIR}/scripts/workflow/step_05_qc_metrics.sh"
 if [ $? -ne 0 ]; then
     echo "✗ Error: QC metrics generation failed. Exiting pipeline."
