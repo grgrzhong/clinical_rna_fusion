@@ -28,13 +28,13 @@ echo "Clinical RNA Fusion Analysis Workflow - Pipeline"
 echo "======================================================================="
 
 # Step 1: Preprocessing
-echo "$(date +"%F") $(date +"%T") Step 1: Preprocessing and QC..."
+echo "$(date +"%F") $(date +"%T") Step 1: Preprocessing and QC ..."
 bash "${PROJECT_DIR}/scripts/workflow/step_01_preprocess.sh"
 if [ $? -ne 0 ]; then
     echo "✗ Error: Preprocessing steps failed. Exiting pipeline."
     exit 1
 fi
-echo "$(date +"%F") $(date +"%T") ✓ Preprocessing steps completed"
+echo "$(date +"%F") $(date +"%T") Step 1: Preprocessing and QC (✓) "
 
 # Step 2: Arriba fusion detection
 echo "$(date +"%F") $(date +"%T") Step 2: Arriba fusion detection..."
@@ -43,7 +43,7 @@ if [ $? -ne 0 ]; then
     echo "✗ Error: Arriba fusion steps failed. Exiting pipeline."
     exit 1
 fi
-echo "$(date +"%F") $(date +"%T") ✓ Arriba fusion steps completed"
+echo "$(date +"%F") $(date +"%T") Step 2: Arriba fusion detection (✓)"
 
 # Step 3: STAR-Fusion detection
 echo "$(date +"%F") $(date +"%T") Step 3: STAR-Fusion detection..."
@@ -52,7 +52,7 @@ if [ $? -ne 0 ]; then
     echo "✗ Error: STAR fusion steps failed. Exiting pipeline."
     exit 1
 fi
-echo "$(date +"%F") $(date +"%T") ✓ STAR fusion steps completed"
+echo "$(date +"%F") $(date +"%T") Step 3: STAR-Fusion detection (✓)"
 
 # Step 4: Generate Fusion report
 echo "$(date +"%F") $(date +"%T") Step 4: Generating fusion report..."
@@ -61,7 +61,7 @@ if [ $? -ne 0 ]; then
     echo "✗ Error: Fusion report generation failed. Exiting pipeline."
     exit 1
 fi
-echo "$(date +"%F") $(date +"%T") ✓ Fusion report steps completed"
+echo "$(date +"%F") $(date +"%T") Step 4: Generating fusion report (✓)"
 
 # Step 5: QC metrics for HS and RnaSeq
 echo "$(date +"%F") $(date +"%T") Step 5: Generating QC metrics..."
@@ -70,7 +70,7 @@ if [ $? -ne 0 ]; then
     echo "✗ Error: QC metrics generation failed. Exiting pipeline."
     exit 1
 fi
-echo "$(date +"%F") $(date +"%T") ✓ QC metrics generation completed"
+echo "$(date +"%F") $(date +"%T") Step 5: Generating QC metrics (✓)"
 
 # log the time of completion
 end_time=$(date +"%F %T")
