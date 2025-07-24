@@ -37,7 +37,7 @@ fi
 echo "$(date +"%F") $(date +"%T") Step 1: Preprocessing and QC (✓) "
 
 # Step 2: Arriba fusion detection
-echo "$(date +"%F") $(date +"%T") Step 2: Arriba fusion detection..."
+echo "$(date +"%F") $(date +"%T") Step 2: Arriba fusion detection ..."
 bash "${PROJECT_DIR}/scripts/workflow/step_02_arriba_fusion.sh"
 if [ $? -ne 0 ]; then
     echo "✗ Error: Arriba fusion steps failed. Exiting pipeline."
@@ -46,7 +46,7 @@ fi
 echo "$(date +"%F") $(date +"%T") Step 2: Arriba fusion detection (✓)"
 
 # Step 3: STAR-Fusion detection
-echo "$(date +"%F") $(date +"%T") Step 3: STAR-Fusion detection..."
+echo "$(date +"%F") $(date +"%T") Step 3: STAR-Fusion detection ..."
 bash "${PROJECT_DIR}/scripts/workflow/step_03_star_fusion.sh"
 if [ $? -ne 0 ]; then
     echo "✗ Error: STAR fusion steps failed. Exiting pipeline."
@@ -55,7 +55,7 @@ fi
 echo "$(date +"%F") $(date +"%T") Step 3: STAR-Fusion detection (✓)"
 
 # Step 4: Generate Fusion report
-echo "$(date +"%F") $(date +"%T") Step 4: Generating fusion report..."
+echo "$(date +"%F") $(date +"%T") Step 4: Generating fusion report ..."
 bash "${PROJECT_DIR}/scripts/workflow/step_04_fusion_report.sh"
 if [ $? -ne 0 ]; then
     echo "✗ Error: Fusion report generation failed. Exiting pipeline."
