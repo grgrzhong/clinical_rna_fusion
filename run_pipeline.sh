@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rnafusion_pipeline.sh ./data/Exome ./results/Exome/250630 6 2
+./rnafusion_pipeline.sh /mnt/f/pipelines/clinical_rna_fusion/data/Exome/250630 /mnt/f/pipelines/clinical_rna_fusion/results/Exome/250630 6 2
