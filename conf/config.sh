@@ -27,8 +27,8 @@ export MODULE_DIR="${PROJECT_DIR}/scripts/modules"
 # Input and output directories
 # "=========================================================================="
 # Use command line argument for INPUT_DIR, or default
-export INPUT_DIR="${1:-${PROJECT_DIR}/data/Raw}"
-export OUTPUT_DIR="${2:-${PROJECT_DIR}/data}"
+export INPUT_DIR="${1:-${PROJECT_DIR}/data/test_data/Raw}"
+export OUTPUT_DIR="${2:-${PROJECT_DIR}/results}"
 
 # Create output directory if it does not exist
 mkdir -p "$OUTPUT_DIR" 
