@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=clinical_rna_Fusion
+#SBATCH --job-name=clinical_rna_fusion
 #SBATCH --partition=amd
 #SBATCH --time=48:00:00
 #SBATCH --qos=normal
@@ -7,8 +7,8 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=32
 #SBATCH --mem-per-cpu=4G
-#SBATCH --output=/lustre1/g/path_my/pipelines/clinical_rna_fusion/slurm/%x_%j.out
-#SBATCH --error=/lustre1/g/path_my/pipelines/clinical_rna_fusion/slurm/%x_%j.err
+#SBATCH --output=/lustre1/g/path_my/pipeline/clinical_rna_fusion/slurm/%x_%j.out
+#SBATCH --error=/lustre1/g/path_my/pipeline/clinical_rna_fusion/slurm/%x_%j.err
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=zhonggr@hku.hk
 
