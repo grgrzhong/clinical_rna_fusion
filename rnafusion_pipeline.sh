@@ -12,8 +12,17 @@
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=zhonggr@hku.hk
 
+# Determine the script directory - works both locally and on SLURM
+if [[ -n "${SLURM_JOB_ID:-}" ]]; then
+    # Running on SLURM - use the submit directory
+    PIPELINE_DIR="${SLURM_SUBMIT_DIR}"
+else
+    # Running locally - use the directory containing this script
+    PIPELINE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+fi
+
 # Load configuration
-source "$(dirname "${BASH_SOURCE[0]}")/conf/config.sh"
+source "${PIPELINE_DIR}/conf/config.sh" "$@"
 
 # Add better error handling
 set -e  # Exit on any error
