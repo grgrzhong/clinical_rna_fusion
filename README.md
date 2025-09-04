@@ -4,7 +4,7 @@
 ![Platform](https://img.shields.io/badge/platform-Linux-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-A comprehensive bioinformatics pipeline for detecting RNA fusions in clinical samples using multiple state-of-the-art tools including Arriba and STAR-Fusion. This pipeline processes paired-end RNA-seq FASTQ files through quality control, alignment, fusion detection, and generates detailed reports suitable for clinical applications.
+A simple pipeline for detecting RNA fusions in clinical samples using multiple state-of-the-art tools including Arriba and STAR-Fusion. This pipeline processes paired-end RNA-seq FASTQ files through quality control, alignment, fusion detection, and generates detailed reports suitable for clinical applications.
 
 ## 🔬 Overview
 
@@ -77,35 +77,14 @@ conda env create -f ./conf/rnafusion.yml
 conda create -n rnafusion apptainer parallel r-base -c conda-forge
 ```
 
-### Step 4: Clone and Setup Pipeline
+### Step 4: Setup Pipeline
 
 ```bash
-# Clone the repository
-git clone https://github.com/grgrzhong/clinical_rna_fusion.git
-cd clinical_rna_fusion
-
 # Make scripts executable
 chmod +x rnafusion_pipeline.sh
 chmod +x run_pipeline_local.sh
 chmod +x run_pipeline_hpc.sh
 chmod +x scripts/workflow/*.sh
-```
-
-### Step 5: Download Reference Data
-
-The pipeline requires several reference files. Update paths in `conf/config.sh`:
-
-```bash
-# Example reference structure
-/Reference/
-├── Gencode/
-│   ├── STAR_index_hg38.v44/
-│   ├── gencode.hg38.v44/
-│   │   ├── GRCh38.primary_assembly.genome.fa
-│   │   └── gencode.v44.primary_assembly.annotation.gtf
-├── GRCh38_gencode_v33_CTAT_lib_Apr062020.plug-n-play/
-├── arriba_v2.4.0/database/
-└── Picard_QC/CollectRnaSeqMetrics/
 ```
 
 ## 🔧 Configuration
@@ -175,11 +154,12 @@ sbatch rnafusion_pipeline.sh
     /results/batch1 \
     1 1
 
-# Multi-sample processing (32-core system)
+# Multi-sample processing
 ./rnafusion_pipeline.sh \
     /data/samples/batch2 \
     /results/batch2 \
-    4 2 \
+    4 \
+    2 \
     /references/hg38 \
     /containers
 ```
@@ -327,28 +307,6 @@ The pipeline generates comprehensive quality metrics:
 - **Confidence scoring**: High/medium/low confidence fusions
 - **Known fusion annotation**: Clinically relevant fusion matches
 
-## 🔬 Clinical Applications
-
-### Supported Cancer Types
-- **Sarcomas**: Synovial sarcoma, Ewing sarcoma, rhabdomyosarcoma
-- **Leukemias**: Acute lymphoblastic leukemia (ALL), acute myeloid leukemia (AML)
-- **Solid tumors**: Breast, lung, prostate, pediatric cancers
-- **CNS tumors**: Gliomas, medulloepitheliomas
-
-### Known Fusion Database
-The pipeline includes comprehensive fusion databases:
-- **Arriba database**: 600+ known oncogenic fusions
-- **COSMIC fusions**: Cancer-specific fusion catalog
-- **ChimerDB**: Literature-curated fusion database
-- **FusionCatcher**: Validated fusion gene pairs
-
-### Clinical Reporting Features
-- **Confidence scoring**: Statistical significance assessment
-- **Breakpoint annotation**: Precise genomic coordinates
-- **Functional impact**: Protein domain disruption analysis
-- **Literature references**: PubMed links for known fusions
-- **Treatment implications**: Targeted therapy recommendations
-
 ## 🚨 Troubleshooting
 
 ### Common Issues
@@ -360,16 +318,6 @@ The pipeline includes comprehensive fusion databases:
 export STAR_JOBS=1  # Reduce parallel STAR jobs
 # Or modify SLURM parameters: --mem-per-cpu=8G
 ```
-
-#### Container Download Failures
-```bash
-# Error: Singularity pull fails
-# Solution: Check internet connectivity and disk space
-# Manual container setup:
-cd containers/
-singularity pull docker://quay.io/biocontainers/fastp:0.23.2--h79da9fb_0
-```
-
 #### Reference File Issues
 ```bash
 # Error: Reference files not found
@@ -418,70 +366,3 @@ results/Output/{sample}/arriba.log     # Arriba fusion log
 
 # Use smaller reference indices if available
 ```
-
-## 📊 Benchmarking and Validation
-
-### Performance Metrics
-- **Single sample runtime**: 2-4 hours (32 cores, 64GB RAM)
-- **Throughput**: 6-12 samples per day (depending on data size)
-- **Storage requirements**: 5-10GB per sample (intermediate files)
-- **Final output size**: 1-2GB per sample
-
-### Validation Data
-The pipeline has been validated on:
-- **Cell line data**: Known fusion-positive cell lines
-- **Clinical samples**: Retrospective cancer cohorts
-- **Synthetic data**: Simulated fusion transcripts
-- **Cross-platform comparison**: Concordance with other pipelines
-
-## 📚 References and Citations
-
-### Key Publications
-1. **Arriba**: Uhrig et al. (2021) "Accurate and efficient detection of gene fusions from RNA sequencing data." *Genome Research* 31:448-460
-2. **STAR-Fusion**: Haas et al. (2019) "Accuracy assessment of fusion transcript detection via read-mapping and de novo fusion transcript assembly-based methods." *Genome Biology* 20:213
-3. **STAR Aligner**: Dobin et al. (2013) "STAR: ultrafast universal RNA-seq aligner." *Bioinformatics* 29:15-21
-
-### Databases
-- **COSMIC**: Forbes et al. (2017) "COSMIC: somatic cancer genetics at high-resolution." *Nucleic Acids Research* 45:D777-D783
-- **ChimerDB**: Lee et al. (2020) "ChimerDB 4.0: an updated and expanded database of fusion genes." *Nucleic Acids Research* 48:D817-D824
-
-## 👥 Contributing
-
-We welcome contributions to improve the pipeline! Please:
-
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Make your changes** and add tests
-4. **Commit your changes**: `git commit -m 'Add amazing feature'`
-5. **Push to the branch**: `git push origin feature/amazing-feature`
-6. **Open a Pull Request**
-
-### Development Guidelines
-- Follow bash scripting best practices
-- Include comprehensive error handling
-- Add documentation for new features
-- Test with multiple sample types
-- Maintain container compatibility
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📧 Support and Contact
-
-- **Issues**: Please use GitHub Issues for bug reports and feature requests
-- **Documentation**: Check the [Wiki](https://github.com/grgrzhong/clinical_rna_fusion/wiki) for detailed guides
-- **Email**: zhonggr@hku.hk for urgent issues or collaboration inquiries
-
-## 🏆 Acknowledgments
-
-- **Arriba team** for the excellent fusion detection algorithm
-- **STAR-Fusion team** for the comprehensive fusion analysis framework
-- **Bioconda community** for container maintenance
-- **HKU Bioinformatics Core** for computational resources and support
-
----
-
-**Pipeline Version**: 2.0.0  
-**Last Updated**: September 2025  
-**Compatibility**: Linux, HPC environments, Docker/Singularity
