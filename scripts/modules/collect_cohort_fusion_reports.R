@@ -68,7 +68,7 @@ for (json_file in json_files) {
     # Load data
     data_flatten <- fromJSON(json_file, flatten = TRUE)
     if (!is.data.frame(data_flatten)) {
-        cat("Skipping file (not a data frame):", json_file, "\n")
+        cat("  Skipping file (not a data frame):", json_file, "\n")
         next
     }
 
@@ -125,8 +125,8 @@ for (json_file in json_files) {
 
     # Save individual fusion summary
     output_path <- file.path(dirname(json_file), paste0(sample_id, "_fusion_summary.xlsx"))
-    write.xlsx(fusion_summary, output_path, rowNames = FALSE, keepNA = TRUE)
-    cat("Saved:", output_path, "\n")
+    write_xlsx(fusion_summary, output_path)
+    cat("  Saved:", output_path, "\n")
 
     # Add sample ID for aggregation
     fusion_summary$Sample <- sample_id

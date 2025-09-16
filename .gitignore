@@ -40,6 +40,7 @@ reports/
 *.maf
 *.maf.gz
 .nextflow.*
+fusion_report.log
 
 # Miscellaneous stuff
 **/*_cache/*
