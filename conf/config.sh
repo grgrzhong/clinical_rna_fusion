@@ -8,11 +8,11 @@
 #############################################################################
 
 # Activate conda environment
-source $(conda info --base)/etc/profile.d/conda.sh
-conda activate rnafusion
+# source $(conda info --base)/etc/profile.d/conda.sh
+# conda activate rnafusion
 
 # Exit on any error
-set -e
+# set -e
 
 # "=========================================================================="
 # Set project directory relative to this script

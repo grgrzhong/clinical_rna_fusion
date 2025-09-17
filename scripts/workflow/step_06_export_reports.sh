@@ -18,6 +18,7 @@ mkdir -p "$REPORTS_DIR"
 ## Export qc reports for entire cohort
 singularity exec \
     --bind "${PROJECT_DIR}:${PROJECT_DIR}" \
+    --bind "${DATA_DIR}:${DATA_DIR}" \
     --bind /tmp:/tmp \
     "${CONTAINER_DIR}/r.sif" \
     Rscript "${MODULE_DIR}/collect_cohort_qc_metrics.R" \
@@ -27,6 +28,7 @@ singularity exec \
 ## Export fusion results for entire cohort
 singularity exec \
     --bind "${PROJECT_DIR}:${PROJECT_DIR}" \
+    --bind "${DATA_DIR}:${DATA_DIR}" \
     --bind /tmp:/tmp \
     "${CONTAINER_DIR}/r.sif" \
     Rscript "${MODULE_DIR}/collect_cohort_fusion_reports.R" \
