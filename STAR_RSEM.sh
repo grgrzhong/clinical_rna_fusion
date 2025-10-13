@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=clinical_rna_fusion
 #SBATCH --partition=amd
-#SBATCH --time=6:00:00
+#SBATCH --time=48:00:00
 #SBATCH --qos=normal
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
@@ -13,6 +13,7 @@
 #SBATCH --mail-user=zhonggr@hku.hk
 
 ## Reference: https://github.com/deweylab/RSEM
+
 ## Create the environment if not already created
 source $(conda info --base)/etc/profile.d/conda.sh
 # conda create -n rsem -c bioconda -c conda-forge fastp=0.23.4 star=2.7.10b rsem=1.3.3 samtools=1.20 parallel
@@ -27,35 +28,35 @@ export OUTPUT_DIR=/lustre1/g/path_my/pipeline/clinical_rna_fusion/data/DFSP
 export FASTQ_TRIM_DIR="${OUTPUT_DIR}/Input-trimmed"
 
 ## Create a map of ENSEMBL gene IDs to transcript IDs and gene names
-awk -F'\t' '$3=="transcript" {
-    # Extract gene_id, transcript_id, and gene_name from the 9th field
-    gene_id = ""; transcript_id = ""; gene_name = "";
-    split($9, attrs, ";");
-    for (i in attrs) {
-        if (match(attrs[i], /gene_id "([^"]+)"/, arr)) {
-            gene_id = arr[1];
-            # Remove version number (everything after the dot)
-            gsub(/\.[0-9]+$/, "", gene_id);
-        }
-        if (match(attrs[i], /transcript_id "([^"]+)"/, arr)) {
-            transcript_id = arr[1];
-            # Remove version number (everything after the dot)
-            gsub(/\.[0-9]+$/, "", transcript_id);
-        }
-        if (match(attrs[i], /gene_name "([^"]+)"/, arr)) {
-            gene_name = arr[1];
-        }
-    }
-    if (gene_id != "" && transcript_id != "" && gene_name != "") {
-        print gene_id "\t" transcript_id "\t" gene_name;
-    }
-}' "${ANNOTATION}" > "${REFERENCE_DIR}/Gencode/gencode.hg38.v44/GRCh38.primary_assembly.genecode.v44.id_map.txt"
+# awk -F'\t' '$3=="transcript" {
+#     # Extract gene_id, transcript_id, and gene_name from the 9th field
+#     gene_id = ""; transcript_id = ""; gene_name = "";
+#     split($9, attrs, ";");
+#     for (i in attrs) {
+#         if (match(attrs[i], /gene_id "([^"]+)"/, arr)) {
+#             gene_id = arr[1];
+#             # Remove version number (everything after the dot)
+#             gsub(/\.[0-9]+$/, "", gene_id);
+#         }
+#         if (match(attrs[i], /transcript_id "([^"]+)"/, arr)) {
+#             transcript_id = arr[1];
+#             # Remove version number (everything after the dot)
+#             gsub(/\.[0-9]+$/, "", transcript_id);
+#         }
+#         if (match(attrs[i], /gene_name "([^"]+)"/, arr)) {
+#             gene_name = arr[1];
+#         }
+#     }
+#     if (gene_id != "" && transcript_id != "" && gene_name != "") {
+#         print gene_id "\t" transcript_id "\t" gene_name;
+#     }
+# }' "${ANNOTATION}" > "${REFERENCE_DIR}/Gencode/gencode.hg38.v44/GRCh38.primary_assembly.genecode.v44.id_map.txt"
 
 # export STAR_PATH=~/miniforge3/envs/rnaseq/bin/STAR
 # export STAR_FUSION_DIR="${OUTPUT_DIR}/Output"
 # export STAR_INDEX="${REFERENCE_DIR}/Gencode/STAR_index_hg38.v44"
 export THREADS=16
-export JOBS=2
+export JOBS=8
 
 export RSEM_DIR="${OUTPUT_DIR}/RSEM" && mkdir -p "$RSEM_DIR"
 export RSEM_REF_DIR="${REFERENCE_DIR}/RSEM"
@@ -65,23 +66,17 @@ export RSEM_REF_NAME="GRCh38_gencode_v44"
 ## Generate the RSEM reference
 ## "======================================================================="
 # if [[ ! -f "${RSEM_REF_DIR}/${RSEM_REF_NAME}.grp" ]]; then
-    echo "$(date +"%F") $(date +"%T") Preparing RSEM reference ..."
-    mkdir -p "$RSEM_REF_DIR"
+    # echo "$(date +"%F") $(date +"%T") Preparing RSEM reference ..."
+    # mkdir -p "$RSEM_REF_DIR"
 
-    # Build RSEM reference
-    rsem-prepare-reference \
-        --gtf "${ANNOTATION}" \
-        --star \
-        -p 16 \
-        "${REFERENCE}" \
-        "${RSEM_REF_DIR}/${RSEM_REF_NAME}" \
-        >& "${RSEM_REF_DIR}/rsem_prepare_reference.log"
-
-# rsem-prepare-reference \
-# --gtf "/lustre1/g/path_my/Reference/Gencode/gencode.hg38.v44/gencode.v44.primary_assembly.annotation.gtf" \
-# -p 8 \
-# "/lustre1/g/path_my/Reference/Gencode/gencode.hg38.v44/GRCh38.primary_assembly.genome.fa" \
-# "/lustre1/g/path_my/Reference/RSEM/GRCh38_gencode_v44"
+    # # Build RSEM reference
+    # rsem-prepare-reference \
+    #     --gtf "${ANNOTATION}" \
+    #     --star \
+    #     -p 16 \
+    #     "${REFERENCE}" \
+    #     "${RSEM_REF_DIR}/${RSEM_REF_NAME}" \
+    #     >& "${RSEM_REF_DIR}/rsem_prepare_reference.log"
 # fi
 
 ## "======================================================================="
@@ -145,7 +140,6 @@ star_alignment() {
 
 export -f star_alignment
 
-
 ## "======================================================================="
 ## RSEM quantification using the STAR-aligned transcriptome BAM
 ## "======================================================================="
@@ -176,7 +170,7 @@ export -f rsem_quantification
 ## "======================================================================="
 ## Process samples in parallel
 ## "======================================================================="
-export samples=$(find "${FASTQ_TRIM_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+samples=$(find "${FASTQ_TRIM_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | sort)
 
 # echo "$samples" | parallel --jobs "$JOBS" star_alignment {}
-# echo "$samples" | parallel --jobs "$JOBS" rsem_quantification {}
+echo "$samples" | parallel --jobs "$JOBS" rsem_quantification {}
