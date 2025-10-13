@@ -61,6 +61,7 @@ export REFERENCE="${REFERENCE_DIR}/Gencode/gencode.hg38.v44/GRCh38.primary_assem
 
 # export ANNOTATION="${REFERENCE_DIR}/Gencode/gencode.v36.primary_assembly.annotation.gtf"
 export ANNOTATION="${REFERENCE_DIR}/Gencode/gencode.hg38.v44/gencode.v44.primary_assembly.annotation.gtf"
+export FEATURE_COUNT_ANNOTATION="${REFERENCE_DIR}/Gencode/gencode.hg38.v44/gencode.v44.protein_coding.annotation.gtf"
 
 export BAIT_INTERVALS="${REFERENCE_DIR}/Exome/xgen-exome-hyb-panel-v2/hg38/xgen-exome-hyb-panel-v2-probes-hg38.interval_list"
 export TARGET_INTERVALS="${REFERENCE_DIR}/Exome/xgen-exome-hyb-panel-v2/hg38/xgen-exome-hyb-panel-v2-targets-hg38.interval_list"

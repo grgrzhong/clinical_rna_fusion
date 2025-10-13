@@ -18,3 +18,8 @@ singularity pull --force --dir "${CONTAINER_DIR}" samtools.sif oras://community.
 singularity pull --force --dir "${CONTAINER_DIR}" star-fusion.sif https://data.broadinstitute.org/Trinity/CTAT_SINGULARITY/STAR-Fusion/star-fusion.v1.15.1.simg
 
 singularity pull --force --dir "${CONTAINER_DIR}" subread.sif oras://community.wave.seqera.io/library/subread:2.1.1--bae420bffb4edf16
+singularity pull --force --dir "${CONTAINER_DIR}" rsem.sif library://yh549848/rnaseqde/rsem:1.3.3
+## Download RSEM container for transcript quantification
+# singularity pull --force --dir "${CONTAINER_DIR}" rsem.sif oras://community.wave.seqera.io/library/rsem:1.3.3--3b6cfedbe5b2229e
+# singularity pull --arch amd64 library://yh549848/rnaseqde/rsem:1.3.3
+# singularity pull --arch amd64 library://yh549848/rnaseqde/rsem:sha256.d2f1b7a0c1c94db46cf6d3ca53a620975c2932fd99371198de1db509541701bd

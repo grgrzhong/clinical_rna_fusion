@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=clinical_rna_fusion
 #SBATCH --partition=amd
-#SBATCH --time=72:00:00
+#SBATCH --time=24:00:00
 #SBATCH --qos=normal
 #SBATCH --nodes=1
 #SBATCH --ntasks=1

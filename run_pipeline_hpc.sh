@@ -22,7 +22,7 @@
 #     /lustre1/g/path_my/Reference
 
 sbatch /lustre1/g/path_my/pipeline/clinical_rna_fusion/rnafusion_pipeline.sh \
-    /lustre1/g/path_my/pipeline/clinical_rna_fusion/data/DFSP/Raw/YeungMCF_UCSO_CPOS-250815-HTS-30439a/primary_seq \
+    /lustre1/g/path_my/pipeline/clinical_rna_fusion/data/DFSP/Raw \
     /lustre1/g/path_my/pipeline/clinical_rna_fusion/data/DFSP \
     16 \
     2 \
