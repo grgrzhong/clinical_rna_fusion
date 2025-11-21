@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #############################################################################
-# Clinical RNA Fusion Analysis Workflow - Feature Counts Step
-# This script generates an expression matrix using featureCounts from STAR-Fusion BAM files.
+## Clinical RNA Fusion Analysis Workflow - Feature Counts Step
+## Authors: Zhong Guorui
+## This script generates an expression matrix using featureCounts from STAR-Fusion BAM files.
 #############################################################################
 
 

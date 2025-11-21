@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #############################################################################
-# Clinical RNA Fusion Analysis Workflow - STAR-Fusion Step
-# This script processes RNA-Seq data using STAR-Fusion for fusion detection.
+## Clinical RNA Fusion Analysis Workflow - STAR-Fusion Step
+## Authors: Zhong Guorui
+## This script processes RNA-Seq data using STAR-Fusion for fusion detection.
 #############################################################################
 
 # Create the output directory if it does not exist

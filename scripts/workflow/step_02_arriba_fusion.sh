@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #############################################################################
-# Clinical RNA Fusion Analysis Workflow - Arriba Step
-# This script processes RNA-Seq data using Arriba for fusion detection.
+## Clinical RNA Fusion Analysis Workflow - Arriba Step
+## Authors: Zhong Guorui
+## This script processes RNA-Seq data using Arriba for fusion detection.
 #############################################################################
 
 # Create the output directory if it does not exist

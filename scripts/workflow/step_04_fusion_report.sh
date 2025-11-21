@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #############################################################################
-# Clinical RNA Fusion Analysis Workflow - Fusion Report Step
-# This script generates a fusion report using Arriba and STAR-Fusion results.
+## Clinical RNA Fusion Analysis Workflow - Fusion Report Step
+## Authors: Zhong Guorui
+## This script generates a fusion report using Arriba and STAR-Fusion results.
 #############################################################################
 
 # Iterate over all sample directories in STARFusion directory

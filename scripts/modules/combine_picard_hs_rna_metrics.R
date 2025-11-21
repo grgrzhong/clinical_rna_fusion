@@ -1,8 +1,9 @@
 #!/usr/bin/env Rscript
 
 ###############################################################################
-# Extract QC metrics from MultiQC output files
-# Usage: Rscript extract_multiqc_metrics.R <multiqc_data_dir> <output_csv> [sample_name]
+## Extract QC metrics from MultiQC output files
+## Authors: Zhong Guorui
+## Usage: Rscript extract_multiqc_metrics.R <multiqc_data_dir> <output_csv> [sample_name]
 ################################################################################
 
 

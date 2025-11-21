@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #############################################################################
-# Clinical RNA Fusion Analysis Workflow - QC Metrics Step
-# This script collects quality control metrics for RNA-Seq data using Picard
+## Clinical RNA Fusion Analysis Workflow - QC Metrics Step
+## Authors: Zhong Guorui
+## This script collects quality control metrics for RNA-Seq data using Picard
 ############################################################################
 
 ## Collect HS metrics for each sample in STAR_FUSION_DIR

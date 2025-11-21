@@ -1,8 +1,9 @@
 #! /bin/bash
 
 #############################################################################
-# Clinical RNA Fusion Analysis Workflow - QC Metrics Step
-# This script collects gene fusion and qc metrics for entire cohorts
+## Clinical RNA Fusion Analysis Workflow - QC Metrics Step
+## Authors: Zhong Guorui
+## This script collects gene fusion and qc metrics for entire cohorts
 ############################################################################
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

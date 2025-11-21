@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #############################################################################
-# Clinical RNA Fusion Analysis Workflow - Preprocessing Step
-# This script preprocesses RNA-Seq data by trimming fastq files and running FastQC.
+## Clinical RNA Fusion Analysis Workflow - Preprocessing Step
+## Authors: Zhong Guorui
+## This script preprocesses RNA-Seq data by trimming fastq files and running FastQC.
 #############################################################################
 
 # Create the output directories if they do not exist
