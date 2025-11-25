@@ -13,77 +13,81 @@
 ## Create the output directory if it does not exist
 mkdir -p "${FEATURE_COUNTS_DIR}"
 
+## "========================================================================="
 ## Function to generate the expression matrix
-# clean_remove_duplicates() {
+## "========================================================================="
+clean_remove_duplicates() {
     
-#     local sample="$1"
+    local sample="$1"
 
-#     ## Sort the BAM file
-#     echo "$(date +"%F") $(date +"%T") - (${sample}) Sorting BAM file ..."
-#     input_bam="${STAR_FUSION_DIR}/${sample}/Aligned.sortedByCoord.out.bam"
+    ## Sort the BAM file
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Sorting BAM file ..."
+    input_bam="${STAR_FUSION_DIR}/${sample}/Aligned.sortedByCoord.out.bam"
 
-#     ## Check if input BAM file exists
-#     if [[ ! -f "$input_bam" ]]; then
-#         echo "Warning: Input BAM file not found: $input_bam"
-#         return 1
-#     fi
+    ## Check if input BAM file exists
+    if [[ ! -f "$input_bam" ]]; then
+        echo "Warning: Input BAM file not found: $input_bam"
+        return 1
+    fi
 
-#     ## Create output directories if they do not exist
-#     mkdir -p "${FEATURE_COUNTS_DIR}/${sample}"
+    ## Create output directories if they do not exist
+    mkdir -p "${FEATURE_COUNTS_DIR}/${sample}"
 
-#     clean_bam="${FEATURE_COUNTS_DIR}/${sample}/${sample}.clean.bam"
-#     dedup_bam="${FEATURE_COUNTS_DIR}/${sample}/${sample}.dedup.bam"
-#     metrics_file="${FEATURE_COUNTS_DIR}/${sample}/${sample}.dedup.metrics.txt"
+    clean_bam="${FEATURE_COUNTS_DIR}/${sample}/${sample}.clean.bam"
+    dedup_bam="${FEATURE_COUNTS_DIR}/${sample}/${sample}.dedup.bam"
+    metrics_file="${FEATURE_COUNTS_DIR}/${sample}/${sample}.dedup.metrics.txt"
 
-#     ## Filter for properly paired, unique, high-quality reads
-#     echo "$(date +"%F") $(date +"%T") - (${sample}) Filtering reads ..."
-#     singularity exec \
-#         --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
-#         --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
-#         --bind "${FEATURE_COUNTS_DIR}:${FEATURE_COUNTS_DIR}" \
-#         --bind /tmp:/tmp \
-#         "${CONTAINER_DIR}/samtools.sif" \
-#         bash -c "samtools view -h -q 20 -f 0x2 -F 0x904 '${input_bam}' | awk '\$0 ~ /^@/ || \$0 ~ /NH:i:1/' | samtools sort -o '${clean_bam}'"
+    ## Filter for properly paired, unique, high-quality reads
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Filtering reads ..."
+    singularity exec \
+        --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
+        --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
+        --bind "${FEATURE_COUNTS_DIR}:${FEATURE_COUNTS_DIR}" \
+        --bind /tmp:/tmp \
+        "${CONTAINER_DIR}/samtools.sif" \
+        bash -c "samtools view -h -q 20 -f 0x2 -F 0x904 '${input_bam}' | awk '\$0 ~ /^@/ || \$0 ~ /NH:i:1/' | samtools sort -o '${clean_bam}'"
 
-#     ## Mark and remove PCR duplicates
-#     echo "$(date +"%F") $(date +"%T") - (${sample}) Marking and removing PCR duplicates ..."
-#     singularity exec \
-#         --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
-#         --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
-#         --bind "${FEATURE_COUNTS_DIR}:${FEATURE_COUNTS_DIR}" \
-#         --bind /tmp:/tmp \
-#         "${CONTAINER_DIR}/picard.sif" \
-#         picard "-Xmx4g" \
-#         MarkDuplicates \
-#         I="${clean_bam}" \
-#         O="${dedup_bam}" \
-#         M="${metrics_file}" \
-#         REMOVE_DUPLICATES=true
+    ## Mark and remove PCR duplicates
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Marking and removing PCR duplicates ..."
+    singularity exec \
+        --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
+        --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
+        --bind "${FEATURE_COUNTS_DIR}:${FEATURE_COUNTS_DIR}" \
+        --bind /tmp:/tmp \
+        "${CONTAINER_DIR}/picard.sif" \
+        picard "-Xmx4g" \
+        MarkDuplicates \
+        I="${clean_bam}" \
+        O="${dedup_bam}" \
+        M="${metrics_file}" \
+        REMOVE_DUPLICATES=true
 
-#     ## Index the deduplicated BAM file
-#     echo "$(date +"%F") $(date +"%T") - (${sample}) Indexing deduplicated BAM file ..."
-#     singularity exec \
-#         --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
-#         --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
-#         --bind "${FEATURE_COUNTS_DIR}:${FEATURE_COUNTS_DIR}" \
-#         "${CONTAINER_DIR}/samtools.sif" \
-#         samtools index "${dedup_bam}"
+    ## Index the deduplicated BAM file
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Indexing deduplicated BAM file ..."
+    singularity exec \
+        --bind "${STAR_FUSION_DIR}:${STAR_FUSION_DIR}" \
+        --bind "${REFERENCE_DIR}:${REFERENCE_DIR}" \
+        --bind "${FEATURE_COUNTS_DIR}:${FEATURE_COUNTS_DIR}" \
+        "${CONTAINER_DIR}/samtools.sif" \
+        samtools index "${dedup_bam}"
 
-#     ## Clean up intermediate files
-#     echo "$(date +"%F") $(date +"%T") - (${sample}) Cleaning up intermediate files ..."
-#     rm -rf "${clean_bam}"
-# }
+    ## Clean up intermediate files
+    echo "$(date +"%F") $(date +"%T") - (${sample}) Cleaning up intermediate files ..."
+    rm -rf "${clean_bam}"
+}
 
-# # Export the function for parallel execution
-# export -f clean_remove_duplicates
+# Export the function for parallel execution
+export -f clean_remove_duplicates
 
-# # Process samples in parallel
+## "========================================================================="
+## Process samples in parallel
+## "========================================================================="
 samples=$(find "${STAR_FUSION_DIR}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | sort)
 
-# echo "$samples" |
-#     parallel \
-#         --jobs "$PARALLEL_JOBS" \
-#         clean_remove_duplicates {}
+echo "$samples" |
+    parallel \
+        --jobs "$PARALLEL_JOBS" \
+        clean_remove_duplicates {}
 
 ## "========================================================================="
 ## Generate feature counts for expression matrix

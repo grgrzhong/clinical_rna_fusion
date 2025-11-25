@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=clinical_rna_fusion
 #SBATCH --partition=amd
-#SBATCH --time=24:00:00
+#SBATCH --time=48:00:00
 #SBATCH --qos=normal
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=20
+#SBATCH --cpus-per-task=16
 #SBATCH --mem-per-cpu=4G
 #SBATCH --output=/lustre1/g/path_my/pipeline/clinical_rna_fusion/slurm/%x_%j.out
 #SBATCH --error=/lustre1/g/path_my/pipeline/clinical_rna_fusion/slurm/%x_%j.err
@@ -36,7 +36,7 @@ echo "======================================================================="
 echo "Clinical RNA Fusion Analysis Workflow - Pipeline"
 echo "======================================================================="
 
-# # Step 1: Preprocessing
+# ## Step 1: Preprocessing
 # echo "$(date +"%F") $(date +"%T") Step 1: Preprocessing and QC ..."
 # bash "${PROJECT_DIR}/scripts/workflow/step_01_preprocess.sh"
 # if [ $? -ne 0 ]; then
@@ -45,7 +45,7 @@ echo "======================================================================="
 # fi
 # echo "$(date +"%F") $(date +"%T") Step 1: Preprocessing and QC (✓) "
 
-# # Step 2: Arriba fusion detection
+# ## Step 2: Arriba fusion detection
 # echo "$(date +"%F") $(date +"%T") Step 2: Arriba fusion detection ..."
 # bash "${PROJECT_DIR}/scripts/workflow/step_02_arriba_fusion.sh"
 # if [ $? -ne 0 ]; then
@@ -54,7 +54,7 @@ echo "======================================================================="
 # fi
 # echo "$(date +"%F") $(date +"%T") Step 2: Arriba fusion detection (✓)"
 
-# # Step 3: STAR-Fusion detection
+# ## Step 3: STAR-Fusion detection
 # echo "$(date +"%F") $(date +"%T") Step 3: STAR-Fusion detection ..."
 # bash "${PROJECT_DIR}/scripts/workflow/step_03_star_fusion.sh"
 # if [ $? -ne 0 ]; then
@@ -63,7 +63,7 @@ echo "======================================================================="
 # fi
 # echo "$(date +"%F") $(date +"%T") Step 3: STAR-Fusion detection (✓)"
 
-# # Step 4: Generate Fusion report
+# ## Step 4: Generate Fusion report
 # echo "$(date +"%F") $(date +"%T") Step 4: Generating fusion report ..."
 # bash "${PROJECT_DIR}/scripts/workflow/step_04_fusion_report.sh"
 # if [ $? -ne 0 ]; then
@@ -72,7 +72,7 @@ echo "======================================================================="
 # fi
 # echo "$(date +"%F") $(date +"%T") Step 4: Generating fusion report (✓)"
 
-# # Step 5: QC metrics for HS and RnaSeq
+# ## Step 5: QC metrics for HS and RnaSeq
 # echo "$(date +"%F") $(date +"%T") Step 5: Generating QC metrics ..."
 # bash "${PROJECT_DIR}/scripts/workflow/step_05_qc_metrics.sh"
 # if [ $? -ne 0 ]; then
@@ -81,16 +81,16 @@ echo "======================================================================="
 # fi
 # echo "$(date +"%F") $(date +"%T") Step 5: Generating QC metrics (✓)"
 
-# # Step 6: Export QC metrics and fusion reports
-# echo "$(date +"%F") $(date +"%T") Step 6: Exporting QC metrics and fusion reports ..."
-# bash "${PROJECT_DIR}/scripts/workflow/step_06_export_reports.sh"
-# if [ $? -ne 0 ]; then
-#     echo "✗ Error: QC metrics export failed. Exiting pipeline."
-#     exit 1
-# fi
-# echo "$(date +"%F") $(date +"%T") Step 6: Exporting QC metrics and fusion reports (✓)"
+## Step 6: Export QC metrics and fusion reports
+echo "$(date +"%F") $(date +"%T") Step 6: Exporting QC metrics and fusion reports ..."
+bash "${PROJECT_DIR}/scripts/workflow/step_06_export_reports.sh"
+if [ $? -ne 0 ]; then
+    echo "✗ Error: QC metrics export failed. Exiting pipeline."
+    exit 1
+fi
+echo "$(date +"%F") $(date +"%T") Step 6: Exporting QC metrics and fusion reports (✓)"
 
-# Step 7: Generate feature counts for expression matrix
+## Step 7: Generate feature counts for expression matrix
 echo "$(date +"%F") $(date +"%T") Step 7: Generating feature counts for expression matrix ..."
 bash "${PROJECT_DIR}/scripts/workflow/step_07_feature_counts.sh"
 if [ $? -ne 0 ]; then
