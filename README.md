@@ -1,48 +1,30 @@
-Clinical RNA Fusion Analysis Pipeline
+# Clinical RNA Fusion Pipeline
 
-![Pipeline Status](https://img.shields.io/badge/pipeline-active-brightgreen.svg)
-![Platform](https://img.shields.io/badge/platform-Linux-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+A pipeline for detecting RNA fusions in clinical samples using Arriba and STAR-Fusion.
 
-A simple pipeline for detecting RNA fusions in clinical samples using Arriba and STAR-Fusion software. This pipeline processes paired-end RNA-seq FASTQ files through quality control, alignment, fusion detection, and generates detailed reports suitable for clinical applications.
+## Quick Start
 
-- [Requirements](#requirements)
-- [Pipeline details](#pipeline-details)
-- [Inputs](#inputs)
-- [Outputs](#outputs)
-- [Resource](#resource)
-- [Quick start](#quick-start)
-- [Troubleshooting](#troubleshooting)
-
-## Requirements
-
-Install conda and essential software
 ```bash
-## Download and install Miniforge (includes conda and mamba)
+# Run with default settings
+./run_pipeline_hpc.sh
+
+# Run with custom parameters
+./rnafusion_pipeline.sh <input_dir> <output_dir> <parallel_jobs> <star_jobs> <reference_dir> <container_dir>
+```
+
+## Setup
+
+```bash
+# Install Miniforge
 wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh"
 bash Miniforge3-Linux-x86_64.sh
-## Follow installation prompts and restart terminal
 source ~/.bashrc
 
-## Verify installation
-conda --version
-mamba --version
-
-## Create the base environemnt with apptainer and gnuparallel
+# Create environment
 conda env create -f ./conf/base.yml
 ```
 
-## Pipeline details
-
-| Step | Script | Tools Used | Description |
-|------|--------|------------|-------------|
-| **1** | `step_01_preprocess.sh` | fastp, FastQC | Quality control and adapter trimming |
-| **2** | `step_02_arriba_fusion.sh` | STAR, Arriba | STAR alignment and Arriba fusion detection |
-| **3** | `step_03_star_fusion.sh` | STAR-Fusion | Dedicated STAR-Fusion analysis |
-| **4** | `step_04_fusion_report.sh` | Custom R scripts | Generate comprehensive fusion reports |
-| **5** | `step_05_qc_metrics.sh` | Picard, MultiQC | Collect QC metrics and generate reports |
-
-## Inputs
+## Input
 Run the pipeline with Key parameters:
 
 | Parameter | Description | Default |
@@ -59,7 +41,7 @@ The pipeline expects paired-end FASTQ files following this pattern:
 {sample_id}_1.fastq.gz  # Forward reads (R1)
 {sample_id}_2.fastq.gz  # Reverse reads (R2)
 ```
-## Outputs
+## Output
 
 The pipeline generates a comprehensive output structure:
 
@@ -109,7 +91,7 @@ For optimal performance:
 
 ```bash
 # Basic usage with default test data
-./run_pipeline_local.sh
+./run_pipeline_hpc.sh
 
 # Custom parameters
 ./rnafusion_pipeline.sh \
@@ -152,18 +134,4 @@ Parallel Processing Errors
 # Solution: Adjust parallelization parameters
 export PARALLEL_JOBS=2    # Reduce from 8 to 2
 export STAR_JOBS=1        # Reduce from 4 to 1
-```
-
-Log Files and Debugging
-
-Important log files for troubleshooting:
-```bash
-# Main pipeline log
-slurm/clinical_rna_Fusion_JOBID.out
-
-# Step-specific logs
-results/Input-trimmed/{sample}/{sample}.fastp.log
-results/FastQC-trimmed/{sample}/{sample}.fastqc.log
-results/Output/{sample}/Log.final.out  # STAR alignment log
-results/Output/{sample}/arriba.log     # Arriba fusion log
 ```

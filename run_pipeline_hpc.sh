@@ -1,5 +1,12 @@
 #!/bin/bash
 
+sbatch /lustre1/g/path_my/pipeline/clinical_rna_fusion/rnafusion_pipeline.sh \
+    /lustre1/g/path_my/pipeline/clinical_rna_fusion/data/251128/Raw \
+    /lustre1/g/path_my/pipeline/clinical_rna_fusion/data/251128 \
+    4 \
+    2 \
+    /lustre1/g/path_my/Reference
+
 # sbatch /lustre1/g/path_my/pipeline/clinical_rna_fusion/rnafusion_pipeline.sh \
 #     /lustre1/g/path_my/pipeline/clinical_rna_fusion/data/DFSP/Raw/YeungMCF_UCSO_CPOS-250731-HTS-30262a/primary_seq \
 #     /lustre1/g/path_my/pipeline/clinical_rna_fusion/results/DFSP/30262a \
@@ -28,9 +35,9 @@
 #     2 \
 #     /lustre1/g/path_my/Reference
 
-sbatch /lustre1/g/path_my/pipeline/clinical_rna_fusion/rnafusion_pipeline.sh \
-    /lustre1/g/path_my/pipeline/clinical_rna_fusion/data/test_data/Raw \
-    /lustre1/g/path_my/pipeline/clinical_rna_fusion/data/test_data \
-    1 \
-    1 \
-    /lustre1/g/path_my/Reference
+# sbatch /lustre1/g/path_my/pipeline/clinical_rna_fusion/rnafusion_pipeline.sh \
+#     /lustre1/g/path_my/pipeline/clinical_rna_fusion/data/test_data/Raw \
+#     /lustre1/g/path_my/pipeline/clinical_rna_fusion/data/test_data \
+#     1 \
+#     1 \
+#     /lustre1/g/path_my/Reference

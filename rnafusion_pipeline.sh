@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=clinical_rna_fusion
+#SBATCH --job-name=RNAseq_251128
 #SBATCH --partition=amd
 #SBATCH --time=48:00:00
 #SBATCH --qos=normal
@@ -36,50 +36,50 @@ echo "======================================================================="
 echo "Clinical RNA Fusion Analysis Workflow - Pipeline"
 echo "======================================================================="
 
-# ## Step 1: Preprocessing
-# echo "$(date +"%F") $(date +"%T") Step 1: Preprocessing and QC ..."
-# bash "${PROJECT_DIR}/scripts/workflow/step_01_preprocess.sh"
-# if [ $? -ne 0 ]; then
-#     echo "✗ Error: Preprocessing steps failed. Exiting pipeline."
-#     exit 1
-# fi
-# echo "$(date +"%F") $(date +"%T") Step 1: Preprocessing and QC (✓) "
+## Step 1: Preprocessing
+echo "$(date +"%F") $(date +"%T") Step 1: Preprocessing and QC ..."
+bash "${PROJECT_DIR}/scripts/workflow/step_01_preprocess.sh"
+if [ $? -ne 0 ]; then
+    echo "✗ Error: Preprocessing steps failed. Exiting pipeline."
+    exit 1
+fi
+echo "$(date +"%F") $(date +"%T") Step 1: Preprocessing and QC (✓) "
 
-# ## Step 2: Arriba fusion detection
-# echo "$(date +"%F") $(date +"%T") Step 2: Arriba fusion detection ..."
-# bash "${PROJECT_DIR}/scripts/workflow/step_02_arriba_fusion.sh"
-# if [ $? -ne 0 ]; then
-#     echo "✗ Error: Arriba fusion steps failed. Exiting pipeline."
-#     exit 1
-# fi
-# echo "$(date +"%F") $(date +"%T") Step 2: Arriba fusion detection (✓)"
+## Step 2: Arriba fusion detection
+echo "$(date +"%F") $(date +"%T") Step 2: Arriba fusion detection ..."
+bash "${PROJECT_DIR}/scripts/workflow/step_02_arriba_fusion.sh"
+if [ $? -ne 0 ]; then
+    echo "✗ Error: Arriba fusion steps failed. Exiting pipeline."
+    exit 1
+fi
+echo "$(date +"%F") $(date +"%T") Step 2: Arriba fusion detection (✓)"
 
-# ## Step 3: STAR-Fusion detection
-# echo "$(date +"%F") $(date +"%T") Step 3: STAR-Fusion detection ..."
-# bash "${PROJECT_DIR}/scripts/workflow/step_03_star_fusion.sh"
-# if [ $? -ne 0 ]; then
-#     echo "✗ Error: STAR fusion steps failed. Exiting pipeline."
-#     exit 1
-# fi
-# echo "$(date +"%F") $(date +"%T") Step 3: STAR-Fusion detection (✓)"
+## Step 3: STAR-Fusion detection
+echo "$(date +"%F") $(date +"%T") Step 3: STAR-Fusion detection ..."
+bash "${PROJECT_DIR}/scripts/workflow/step_03_star_fusion.sh"
+if [ $? -ne 0 ]; then
+    echo "✗ Error: STAR fusion steps failed. Exiting pipeline."
+    exit 1
+fi
+echo "$(date +"%F") $(date +"%T") Step 3: STAR-Fusion detection (✓)"
 
-# ## Step 4: Generate Fusion report
-# echo "$(date +"%F") $(date +"%T") Step 4: Generating fusion report ..."
-# bash "${PROJECT_DIR}/scripts/workflow/step_04_fusion_report.sh"
-# if [ $? -ne 0 ]; then
-#     echo "✗ Error: Fusion report generation failed. Exiting pipeline."
-#     exit 1
-# fi
-# echo "$(date +"%F") $(date +"%T") Step 4: Generating fusion report (✓)"
+## Step 4: Generate Fusion report
+echo "$(date +"%F") $(date +"%T") Step 4: Generating fusion report ..."
+bash "${PROJECT_DIR}/scripts/workflow/step_04_fusion_report.sh"
+if [ $? -ne 0 ]; then
+    echo "✗ Error: Fusion report generation failed. Exiting pipeline."
+    exit 1
+fi
+echo "$(date +"%F") $(date +"%T") Step 4: Generating fusion report (✓)"
 
-# ## Step 5: QC metrics for HS and RnaSeq
-# echo "$(date +"%F") $(date +"%T") Step 5: Generating QC metrics ..."
-# bash "${PROJECT_DIR}/scripts/workflow/step_05_qc_metrics.sh"
-# if [ $? -ne 0 ]; then
-#     echo "✗ Error: QC metrics generation failed. Exiting pipeline."
-#     exit 1
-# fi
-# echo "$(date +"%F") $(date +"%T") Step 5: Generating QC metrics (✓)"
+## Step 5: QC metrics for HS and RnaSeq
+echo "$(date +"%F") $(date +"%T") Step 5: Generating QC metrics ..."
+bash "${PROJECT_DIR}/scripts/workflow/step_05_qc_metrics.sh"
+if [ $? -ne 0 ]; then
+    echo "✗ Error: QC metrics generation failed. Exiting pipeline."
+    exit 1
+fi
+echo "$(date +"%F") $(date +"%T") Step 5: Generating QC metrics (✓)"
 
 ## Step 6: Export QC metrics and fusion reports
 echo "$(date +"%F") $(date +"%T") Step 6: Exporting QC metrics and fusion reports ..."
