@@ -52,7 +52,9 @@ export FEATURE_COUNTS_DIR="${OUTPUT_DIR}/Feature-counts"
 # "=========================================================================="
 # Reference and annotation directories
 # "=========================================================================="
-export REFERENCE_DIR="${5:-/mnt/f/Reference}"
+export REFERENCE_DIR="${5:-/lustre1/g/path_my/Reference}"
+export CONTAINER_DIR="${6:-${PROJECT_DIR}}/containers"
+
 # export STAR_INDEX="${REFERENCE_DIR}/Gencode/STAR_index"
 export STAR_INDEX="${REFERENCE_DIR}/Gencode/STAR_index_hg38.v44"
 
@@ -75,22 +77,6 @@ export BLACKLIST="${REFERENCE_DIR}/arriba_v2.4.0/database/blacklist_hg38_GRCh38_
 export KNOWN_FUSION="${REFERENCE_DIR}/arriba_v2.4.0/database/known_fusions_hg38_GRCh38_v2.4.0.tsv.gz"
 export PROTEIN_DOMAINS="${REFERENCE_DIR}/arriba_v2.4.0/database/protein_domains_hg38_GRCh38_v2.4.0.gff3"
 export CYTOBANDS="${REFERENCE_DIR}/arriba_v2.4.0/database/cytobands_hg38_GRCh38_v2.4.0.tsv"
-
-echo "======================================================================="
-echo "Clinical RNA Fusion Analysis Workflow - Containers"
-echo "======================================================================="
-export CONTAINER_DIR="${6:-${PROJECT_DIR}}/containers"
-
-# Setup containers if not already done
-if [ ! -d "$CONTAINER_DIR" ]; then
-    echo "$(date +"%F") $(date +"%T") Container directory not found. Setting up containers..."
-    mkdir -p "$CONTAINER_DIR"
-    bash "${PROJECT_DIR}/conf/containers.sh"
-    echo "$(date +"%F") $(date +"%T") ✓ Container setup completed"
-else
-    echo "$(date +"%F") $(date +"%T") Container directory already exists: $CONTAINER_DIR"
-    echo "$(date +"%F") $(date +"%T") Skipping container setup step."
-fi
 
 # Print out the environment information
 echo "========================================================================"

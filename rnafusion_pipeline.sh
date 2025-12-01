@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=RNAseq_251128
 #SBATCH --partition=amd
-#SBATCH --time=48:00:00
+#SBATCH --time=12:00:00
 #SBATCH --qos=normal
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=20
 #SBATCH --mem-per-cpu=4G
 #SBATCH --output=/lustre1/g/path_my/pipeline/clinical_rna_fusion/slurm/%x_%j.out
 #SBATCH --error=/lustre1/g/path_my/pipeline/clinical_rna_fusion/slurm/%x_%j.err
@@ -90,14 +90,14 @@ if [ $? -ne 0 ]; then
 fi
 echo "$(date +"%F") $(date +"%T") Step 6: Exporting QC metrics and fusion reports (✓)"
 
-## Step 7: Generate feature counts for expression matrix
-echo "$(date +"%F") $(date +"%T") Step 7: Generating feature counts for expression matrix ..."
-bash "${PROJECT_DIR}/scripts/workflow/step_07_feature_counts.sh"
-if [ $? -ne 0 ]; then
-    echo "✗ Error: Feature counts generation failed. Exiting pipeline."
-    exit 1
-fi
-echo "$(date +"%F") $(date +"%T") Step 7: Generating feature counts for expression matrix (✓)"
+## # Step 7: Generate feature counts for expression matrix
+# echo "$(date +"%F") $(date +"%T") Step 7: Generating feature counts for expression matrix ..."
+# bash "${PROJECT_DIR}/scripts/workflow/step_07_feature_counts.sh"
+# if [ $? -ne 0 ]; then
+#     echo "✗ Error: Feature counts generation failed. Exiting pipeline."
+#     exit 1
+# fi
+# echo "$(date +"%F") $(date +"%T") Step 7: Generating feature counts for expression matrix (✓)"
 
 # log the time of completion
 end_time=$(date +"%F %T")
